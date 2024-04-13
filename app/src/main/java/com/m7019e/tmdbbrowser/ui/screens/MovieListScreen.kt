@@ -11,8 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
@@ -22,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -70,18 +74,15 @@ fun MovieListCard(movie: Movie, onClick: (Movie) -> Unit, modifier: Modifier = M
             Column(modifier = Modifier.align(Alignment.CenterVertically)) {
                 Text(text = movie.title, style = MaterialTheme.typography.headlineSmall)
                 Text(text = movie.releaseDate, style = MaterialTheme.typography.titleSmall)
+                Row(){
+                    Icon(imageVector = Icons.Filled.Star, contentDescription = stringResource(id = R.string.icon_star))
+                    Text(text = "%.2f".format(movie.userRating),modifier=Modifier.align(Alignment.CenterVertically))
+                }
                 MovieDetailsGenreList(movie = movie)
             }
         }
     }
 }
-
-@Preview
-@Composable
-fun MovieListPreview() {
-    MovieListScreen(movieList = Movies.getMovies(), {})
-}
-
 @Preview
 @Composable
 fun MovieCardPreview() {

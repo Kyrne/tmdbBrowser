@@ -18,13 +18,14 @@ object Movies {
                 backdropPath = "/sR0SpCrXamlIkYMdfz83sFn5JS6.jpg",
                 releaseDate = "2024-03-27",
                 overview = "Following their explosive showdown, Godzilla and Kong must reunite against a colossal undiscovered threat hidden within our world, challenging their very existence – and our own.",
+                userRating = 6.74f,
                 genres = listOf(
                     Genre.ACTION,
                     Genre.SCIENCE_FICTION,
                     Genre.ADVENTURE,
                     Genre.FANTASY
                 ),
-                homepage = "https://www.godzillaxkongmovie.com"
+                homepage = "https://www.godzillaxkongmovie.com",
             ),
             Movie(
                 tmdbId = 1011985,
@@ -35,6 +36,7 @@ object Movies {
                 backdropPath = "/1XDDXPXGiI8id7MrUxK36ke7gkX.jpg",
                 releaseDate = "2024-03-02",
                 overview = "Po is gearing up to become the spiritual leader of his Valley of Peace, but also needs someone to take his place as Dragon Warrior. As such, he will train a new kung fu practitioner for the spot and will encounter a villain called the Chameleon who conjures villains from the past.",
+                userRating = 7.063f,
                 genres = listOf(
                     Genre.ANIMATION,
                     Genre.ACTION,
@@ -52,6 +54,7 @@ object Movies {
                 backdropPath = "/oe7mWkvYhK4PLRNAVSvonzyUXNy.jpg",
                 releaseDate = "2024-03-08",
                 overview = "Ex-UFC fighter Dalton takes a job as a bouncer at a Florida Keys roadhouse, only to discover that this paradise is not all it seems.",
+                userRating = 7.061f,
                 genres = listOf(Genre.ACTION, Genre.THRILLER),
                 homepage = "https://www.amazon.com/gp/video/detail/B0CH5YQPZQ"
             ),
@@ -63,6 +66,7 @@ object Movies {
                 backdropPath = "/pwGmXVKUgKN13psUjlhC9zBcq1o.jpg",
                 releaseDate = "2024-02-14",
                 overview = "Forced to confront revelations about her past, paramedic Cassandra Webb forges a relationship with three young women destined for powerful futures...if they can all survive a deadly present.",
+                userRating = 5.677f,
                 genres = listOf(Genre.ACTION, Genre.FANTASY),
                 homepage = "https://www.madameweb.movie"
             ),
@@ -74,6 +78,7 @@ object Movies {
                 backdropPath = "/9c0lHTXRqDBxeOToVzRu0GArSne.jpg",
                 releaseDate = "2024-03-01",
                 overview = "Set in a post-apocalyptic world where a global airborne pandemic has wiped out 90% of the Earth's population and only the young and immune have endured as scavengers. For Ellie and Quinn, the daily challenges to stay alive are compounded when they become hunted by the merciless Stalkers.",
+                userRating = 5.061f,
                 genres = listOf(Genre.SCIENCE_FICTION, Genre.ACTION),
             ),
         )

@@ -180,9 +180,3 @@ fun MovieDetailsGenreList(movie: Movie) {
 fun MovieDetailsPreview() {
     MovieDetails(Movies.getMovies()[0])
 }
-
-@Preview(showBackground = true)
-@Composable
-fun MovieDetailsPreview2() {
-    MovieDetails(Movies.getMovies()[1])
-}
