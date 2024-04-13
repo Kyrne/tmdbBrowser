@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.m7019e.tmdbbrowser.R
 import com.m7019e.tmdbbrowser.data.Movies
 import com.m7019e.tmdbbrowser.model.Movie
 import com.m7019e.tmdbbrowser.utils.Constants
@@ -41,21 +42,36 @@ fun MovieDetailsScreen(movie: Movie, modifier: Modifier = Modifier) {
 }
 
 @Composable
+fun MovieDetailsHyperlink(movie: Movie) {
+
+}
+
+@Composable
 fun MovieDetails(movie: Movie, modifier: Modifier = Modifier) {
     Column {
         MovieDetailsTitle(movie = movie)
         MovieDetailsGenreList(movie = movie)
         Spacer(modifier = Modifier.size(8.dp))
-        Text(
-            text = movie.overview,
-            style = MaterialTheme.typography.bodyMedium,
-        )
+        MovieDetailsOverview(movie = movie)
     }
+}
+
+@Composable
+fun MovieDetailsOverview(movie: Movie) {
+    Text(
+        text = stringResource(id = R.string.overview),
+        style = MaterialTheme.typography.titleLarge,
+        fontWeight = FontWeight.SemiBold
+    )
+    Text(
+        text = movie.overview,
+        style = MaterialTheme.typography.bodyMedium,
+    )
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun MovieDetailsTitle(movie: Movie){
+fun MovieDetailsTitle(movie: Movie) {
     FlowRow(Modifier.fillMaxWidth()) {
         Text(
             text = movie.title,
@@ -73,10 +89,14 @@ fun MovieDetailsTitle(movie: Movie){
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun MovieDetailsGenreList(movie: Movie){
+fun MovieDetailsGenreList(movie: Movie) {
     FlowRow(Modifier.fillMaxWidth()) {
-        repeat(movie.genres.size){
-            Text(text = stringResource(id = movie.genres[it].genre),style=MaterialTheme.typography.labelLarge,modifier=Modifier.padding(end = 4.dp))
+        repeat(movie.genres.size) {
+            Text(
+                text = stringResource(id = movie.genres[it].genre),
+                style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier.padding(end = 4.dp)
+            )
         }
     }
 }

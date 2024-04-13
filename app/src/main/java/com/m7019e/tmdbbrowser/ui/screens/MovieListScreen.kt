@@ -1,5 +1,6 @@
 package com.m7019e.tmdbbrowser.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,19 +11,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.m7019e.tmdbbrowser.R
 import com.m7019e.tmdbbrowser.data.Movies
 import com.m7019e.tmdbbrowser.model.Movie
+import com.m7019e.tmdbbrowser.ui.screens.movie.MovieDetailsGenreList
 import com.m7019e.tmdbbrowser.utils.Constants
 
 
@@ -34,7 +40,7 @@ fun MovieListScreen(
 ) {
     LazyColumn(modifier = modifier) {
         items(movieList) { movie ->
-            MovieListCard(movie = movie, onClick = onMovieClick, modifier = Modifier.padding(8.dp))
+            MovieListCard(movie = movie, onClick = onMovieClick)
         }
     }
 }
@@ -42,7 +48,13 @@ fun MovieListScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieListCard(movie: Movie, onClick: (Movie) -> Unit, modifier: Modifier = Modifier) {
-    Card(onClick = { onClick(movie) }, modifier = modifier.fillMaxWidth()) {
+    OutlinedCard(
+        onClick = { onClick(movie) },
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        shape = RectangleShape,
+        border = BorderStroke(0.1.dp, MaterialTheme.colorScheme.outline),
+        modifier = modifier.fillMaxWidth()
+    ) {
         Row {
             Box {
                 AsyncImage(
@@ -54,16 +66,11 @@ fun MovieListCard(movie: Movie, onClick: (Movie) -> Unit, modifier: Modifier = M
                     contentScale = ContentScale.Fit
                 )
             }
-            Column(modifier = Modifier.padding(2.dp)) {
+            Spacer(modifier = Modifier.padding(start = 8.dp))
+            Column(modifier = Modifier.align(Alignment.CenterVertically)) {
                 Text(text = movie.title, style = MaterialTheme.typography.headlineSmall)
-                Text(text = movie.releaseDate, style = MaterialTheme.typography.bodySmall)
-                Spacer(modifier = Modifier.padding(2.dp))
-                Text(
-                    text = movie.overview,
-                    style = MaterialTheme.typography.bodySmall,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis
-                )
+                Text(text = movie.releaseDate, style = MaterialTheme.typography.titleSmall)
+                MovieDetailsGenreList(movie = movie)
             }
         }
     }
