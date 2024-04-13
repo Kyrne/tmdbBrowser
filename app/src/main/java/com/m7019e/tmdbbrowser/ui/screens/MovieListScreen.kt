@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,17 +27,22 @@ import com.m7019e.tmdbbrowser.utils.Constants
 
 
 @Composable
-fun MovieListScreen(movieList: List<Movie>, modifier: Modifier = Modifier) {
+fun MovieListScreen(
+    movieList: List<Movie>,
+    onMovieClick: (Movie) -> Unit,
+    modifier: Modifier = Modifier
+) {
     LazyColumn(modifier = modifier) {
         items(movieList) { movie ->
-            MovieListCard(movie = movie, modifier = Modifier.padding(8.dp))
+            MovieListCard(movie = movie, onClick = onMovieClick, modifier = Modifier.padding(8.dp))
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MovieListCard(movie: Movie, modifier: Modifier = Modifier) {
-    Card(modifier = modifier.fillMaxWidth()) {
+fun MovieListCard(movie: Movie, onClick: (Movie) -> Unit, modifier: Modifier = Modifier) {
+    Card(onClick = { onClick(movie) }, modifier = modifier.fillMaxWidth()) {
         Row {
             Box {
                 AsyncImage(
@@ -45,7 +51,7 @@ fun MovieListCard(movie: Movie, modifier: Modifier = Modifier) {
                     modifier = modifier
                         .width(92.dp)
                         .height(138.dp),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Fit
                 )
             }
             Column(modifier = Modifier.padding(2.dp)) {
@@ -66,11 +72,11 @@ fun MovieListCard(movie: Movie, modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun MovieListPreview() {
-    MovieListScreen(movieList = Movies.getMovies())
+    MovieListScreen(movieList = Movies.getMovies(), {})
 }
 
 @Preview
 @Composable
 fun MovieCardPreview() {
-    MovieListCard(movie = Movies.defaultMovie)
+    MovieListCard(movie = Movies.defaultMovie, {})
 }
