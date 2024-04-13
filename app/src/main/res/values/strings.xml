@@ -2,4 +2,15 @@
     <string name="app_name">TMDB Browser</string>
     <string name="movie_details">Movie Details</string>
     <string name="back_button">Back</string>
+    <string name="movie_homepage_button">Visit homepage</string>
+    <string name="movie_imdb_button">Visit IMDB</string>
+    <string name="genre_action">Action</string>
+    <string name="genre_science_fiction">Science Fiction</string>
+    <string name="genre_adventure">Adventure</string>
+    <string name="genre_fantasy">Fantasy</string>
+    <string name="genre_animation">Animation</string>
+    <string name="genre_comedy">Comedy</string>
+    <string name="genre_family">Family</string>
+    <string name="genre_thriller">Thriller</string>
+    <string name="overview">Overview</string>
 </resources>

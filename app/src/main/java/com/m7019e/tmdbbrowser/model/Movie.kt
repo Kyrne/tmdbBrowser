@@ -1,10 +1,14 @@
 package com.m7019e.tmdbbrowser.model
 
+import androidx.annotation.StringRes
+import com.m7019e.tmdbbrowser.R
+
 
 /**
  * A class representing a *movie* and it's details
  *
- * @param id movie id on TMDB
+ * @param tmdbId movie id on TMDB
+ * @param imdbId movie id on IMDB
  * @param title movie title
  * @param posterPath path to poster used in the movie list
  * @param backdropPath path to backdrop used in detail page
@@ -12,10 +16,24 @@ package com.m7019e.tmdbbrowser.model
  * @param overview a short description of the movie
  */
 data class Movie(
-    val id: Int,
-    val title: String,
+    var tmdbId: Int,
+    var imdbId: String,
+    var title: String,
     var posterPath: String,
     var backdropPath: String,
     var releaseDate: String,
     var overview: String,
+    var genres: List<Genre>,
+    var homepage: String? = null
 )
+
+enum class Genre(@StringRes val genre: Int) {
+    ACTION(genre = R.string.genre_action),
+    ADVENTURE(genre = R.string.genre_adventure),
+    ANIMATION(genre = R.string.genre_animation),
+    COMEDY(genre = R.string.genre_comedy),
+    FAMILY(genre = R.string.genre_family),
+    FANTASY(genre = R.string.genre_fantasy),
+    SCIENCE_FICTION(genre = R.string.genre_science_fiction),
+    THRILLER(genre = R.string.genre_thriller)
+}
