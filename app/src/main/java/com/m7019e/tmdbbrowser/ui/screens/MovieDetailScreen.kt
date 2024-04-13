@@ -1,19 +1,27 @@
 package com.m7019e.tmdbbrowser.ui.screens.movie
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.ExitToApp
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,31 +50,58 @@ fun MovieDetailsScreen(movie: Movie, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun MovieDetailsHyperlink(movie: Movie) {
-
-}
-
-@Composable
 fun MovieDetails(movie: Movie, modifier: Modifier = Modifier) {
     Column {
         MovieDetailsTitle(movie = movie)
         MovieDetailsGenreList(movie = movie)
         Spacer(modifier = Modifier.size(8.dp))
         MovieDetailsOverview(movie = movie)
+
+        if (movie.homepage != null) {
+            Spacer(modifier = Modifier.padding(8.dp))
+            MovieDetailsLinkToHomepage(movie = movie)
+        }
+
+    }
+}
+
+@Composable
+fun MovieDetailsLinkToHomepage(movie: Movie) {
+    val ctx = LocalContext.current
+    FilledIconButton(
+        onClick = {
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(movie.homepage))
+            ctx.startActivity(browserIntent)
+        },
+        shape = MaterialTheme.shapes.extraSmall,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row {
+            Icon(
+                imageVector = Icons.TwoTone.ExitToApp,
+                contentDescription = stringResource(id = R.string.movie_homepage_button),
+            )
+            Text(
+                text = stringResource(id = R.string.movie_homepage_button),
+                modifier = Modifier.align(Alignment.CenterVertically)
+            )
+        }
     }
 }
 
 @Composable
 fun MovieDetailsOverview(movie: Movie) {
-    Text(
-        text = stringResource(id = R.string.overview),
-        style = MaterialTheme.typography.titleLarge,
-        fontWeight = FontWeight.SemiBold
-    )
-    Text(
-        text = movie.overview,
-        style = MaterialTheme.typography.bodyMedium,
-    )
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = stringResource(id = R.string.overview),
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.SemiBold
+        )
+        Text(
+            text = movie.overview,
+            style = MaterialTheme.typography.bodyMedium,
+        )
+    }
 }
 
 @OptIn(ExperimentalLayoutApi::class)

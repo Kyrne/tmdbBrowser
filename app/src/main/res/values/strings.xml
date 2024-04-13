@@ -2,6 +2,7 @@
     <string name="app_name">TMDB Browser</string>
     <string name="movie_details">Movie Details</string>
     <string name="back_button">Back</string>
+    <string name="movie_homepage_button">Visit movie homepage</string>
     <string name="genre_action">Action</string>
     <string name="genre_science_fiction">Science Fiction</string>
     <string name="genre_adventure">Adventure</string>
