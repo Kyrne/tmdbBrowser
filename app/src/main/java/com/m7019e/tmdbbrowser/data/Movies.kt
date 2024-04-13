@@ -11,7 +11,8 @@ object Movies {
     fun getMovies(): List<Movie> {
         return listOf(
             Movie(
-                id = 823464,
+                tmdbId = 823464,
+                imdbId = "tt14539740",
                 title = "Godzilla x Kong: The New Empire",
                 posterPath = "/tMefBSflR6PGQLv7WvFPpKLZkyk.jpg",
                 backdropPath = "/sR0SpCrXamlIkYMdfz83sFn5JS6.jpg",
@@ -26,7 +27,9 @@ object Movies {
                 homepage = "https://www.godzillaxkongmovie.com"
             ),
             Movie(
-                id = 1011985,
+                tmdbId = 1011985,
+                imdbId = "tt21692408",
+
                 title = "Kung Fu Panda 4",
                 posterPath = "/kDp1vUBnMpe8ak4rjgl3cLELqjU.jpg",
                 backdropPath = "/1XDDXPXGiI8id7MrUxK36ke7gkX.jpg",
@@ -42,7 +45,8 @@ object Movies {
                 homepage = "https://www.dreamworks.com/movies/kung-fu-panda-4"
             ),
             Movie(
-                id = 359410,
+                tmdbId = 359410,
+                imdbId = "tt3359350",
                 title = "Road House",
                 posterPath = "/bXi6IQiQDHD00JFio5ZSZOeRSBh.jpg",
                 backdropPath = "/oe7mWkvYhK4PLRNAVSvonzyUXNy.jpg",
@@ -52,7 +56,8 @@ object Movies {
                 homepage = "https://www.amazon.com/gp/video/detail/B0CH5YQPZQ"
             ),
             Movie(
-                id = 634492,
+                tmdbId = 634492,
+                imdbId = "tt11057302",
                 title = "Madame Web",
                 posterPath = "/rULWuutDcN5NvtiZi4FRPzRYWSh.jpg",
                 backdropPath = "/pwGmXVKUgKN13psUjlhC9zBcq1o.jpg",
@@ -62,7 +67,8 @@ object Movies {
                 homepage = "https://www.madameweb.movie"
             ),
             Movie(
-                id = 935271,
+                tmdbId = 935271,
+                imdbId = "tt12774526",
                 title = "After the Pandemic",
                 posterPath = "/p1LbrdJ53dGfEhRopG71akfzOVu.jpg",
                 backdropPath = "/9c0lHTXRqDBxeOToVzRu0GArSne.jpg",

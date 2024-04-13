@@ -13,7 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.ExitToApp
-import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -56,36 +57,74 @@ fun MovieDetails(movie: Movie, modifier: Modifier = Modifier) {
         MovieDetailsGenreList(movie = movie)
         Spacer(modifier = Modifier.size(8.dp))
         MovieDetailsOverview(movie = movie)
-
-        if (movie.homepage != null) {
-            Spacer(modifier = Modifier.padding(8.dp))
-            MovieDetailsLinkToHomepage(movie = movie)
+        Row {
+            if (movie.homepage != null) {
+                MovieDetailsLinkToHomepage(
+                    movie = movie,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 8.dp, vertical = 8.dp)
+                )
+            }
+            MovieDetailsIMDBLink(
+                movie = movie,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 8.dp, vertical = 8.dp)
+            )
         }
+
 
     }
 }
 
 @Composable
-fun MovieDetailsLinkToHomepage(movie: Movie) {
+fun MovieDetailsIMDBLink(movie: Movie, modifier: Modifier = Modifier) {
     val ctx = LocalContext.current
-    FilledIconButton(
+    Button(
+        onClick = {
+            val browserIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse(Constants.IMDB_BASE_URL + movie.homepage))
+            ctx.startActivity(browserIntent)
+        },
+        shape = MaterialTheme.shapes.extraSmall,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.secondary,
+            contentColor = MaterialTheme.colorScheme.onSecondary
+        ), modifier = modifier
+    ) {
+        Icon(
+            imageVector = Icons.TwoTone.ExitToApp,
+            contentDescription = stringResource(id = R.string.movie_imdb_button),
+        )
+        Text(
+            text = stringResource(id = R.string.movie_imdb_button),
+        )
+    }
+}
+
+@Composable
+fun MovieDetailsLinkToHomepage(movie: Movie, modifier: Modifier = Modifier) {
+    val ctx = LocalContext.current
+    Button(
         onClick = {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(movie.homepage))
             ctx.startActivity(browserIntent)
         },
         shape = MaterialTheme.shapes.extraSmall,
-        modifier = Modifier.fillMaxWidth()
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
+        ), modifier = modifier
+
     ) {
-        Row {
-            Icon(
-                imageVector = Icons.TwoTone.ExitToApp,
-                contentDescription = stringResource(id = R.string.movie_homepage_button),
-            )
-            Text(
-                text = stringResource(id = R.string.movie_homepage_button),
-                modifier = Modifier.align(Alignment.CenterVertically)
-            )
-        }
+        Icon(
+            imageVector = Icons.TwoTone.ExitToApp,
+            contentDescription = stringResource(id = R.string.movie_homepage_button),
+        )
+        Text(
+            text = stringResource(id = R.string.movie_homepage_button),
+        )
     }
 }
 

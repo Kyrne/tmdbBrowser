@@ -2,13 +2,13 @@ package com.m7019e.tmdbbrowser.model
 
 import androidx.annotation.StringRes
 import com.m7019e.tmdbbrowser.R
-import java.util.Date
 
 
 /**
  * A class representing a *movie* and it's details
  *
- * @param id movie id on TMDB
+ * @param tmdbId movie id on TMDB
+ * @param imdbId movie id on IMDB
  * @param title movie title
  * @param posterPath path to poster used in the movie list
  * @param backdropPath path to backdrop used in detail page
@@ -16,7 +16,8 @@ import java.util.Date
  * @param overview a short description of the movie
  */
 data class Movie(
-    var id: Int,
+    var tmdbId: Int,
+    var imdbId: String,
     var title: String,
     var posterPath: String,
     var backdropPath: String,
