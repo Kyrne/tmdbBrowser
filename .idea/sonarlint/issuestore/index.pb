@@ -16,3 +16,11 @@ B
 build.gradle.kts,d/b/dbcff70658daf80b53ce624f6adcaa529df5ed8d
 >
 app/.gitignore,5/1/51e1c5d383dfaa35e0e7e5873a0a99355a86880f
+P
+ app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
+g
+7app/src/main/java/com/m7019e/tmdbbrowser/model/Movie.kt,f/d/fd114c89bf40a5e47290f26922f648023b9de03b
+g
+7app/src/main/java/com/m7019e/tmdbbrowser/data/Movies.kt,c/6/c6897f726f92967a84035e425190fb9fbb57cfca
+p
+@app/src/main/java/com/m7019e/tmdbbrowser/ui/tmdbBrowserScreen.kt,3/6/365a2f7099bf708e08ff024566838c1a42b7747c
