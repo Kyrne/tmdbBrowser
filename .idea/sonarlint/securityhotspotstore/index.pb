@@ -1,14 +1,12 @@
 
 9
-	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 h
 8app/src/main/java/com/m7019e/tmdbbrowser/MainActivity.kt,4/d/4da0f4eaf1602ac24078e17c304ca7597db8c34f
 H
 .github/workflows/ci.yml,8/9/899ce9c202bf7bb5480e72836c3edc773c9c4244
 D
 app/build.gradle.kts,d/2/d2a4383452aad84a18429a5844d31330a012a9e6
-B
-secrets.properties,4/1/4117a40ac446e6d331063f729af6fa5868a63cc7
 :
 
 .gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
@@ -17,20 +15,22 @@ B
 >
 app/.gitignore,5/1/51e1c5d383dfaa35e0e7e5873a0a99355a86880f
 P
- app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
+ app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e
 g
-7app/src/main/java/com/m7019e/tmdbbrowser/model/Movie.kt,f/d/fd114c89bf40a5e47290f26922f648023b9de03b
+7app/src/main/java/com/m7019e/tmdbbrowser/model/Movie.kt,f\d\fd114c89bf40a5e47290f26922f648023b9de03b
 g
-7app/src/main/java/com/m7019e/tmdbbrowser/data/Movies.kt,c/6/c6897f726f92967a84035e425190fb9fbb57cfca
+7app/src/main/java/com/m7019e/tmdbbrowser/data/Movies.kt,c\6\c6897f726f92967a84035e425190fb9fbb57cfca
 p
-@app/src/main/java/com/m7019e/tmdbbrowser/ui/tmdbBrowserScreen.kt,3/6/365a2f7099bf708e08ff024566838c1a42b7747c
+@app/src/main/java/com/m7019e/tmdbbrowser/ui/tmdbBrowserScreen.kt,3\6\365a2f7099bf708e08ff024566838c1a42b7747c
 k
-;app/src/main/java/com/m7019e/tmdbbrowser/utils/Constants.kt,1/5/151ee478e3b776184e8559e35bd53474fa6111f0
+;app/src/main/java/com/m7019e/tmdbbrowser/utils/Constants.kt,1\5\151ee478e3b776184e8559e35bd53474fa6111f0
 m
-=app/src/main/java/com/m7019e/tmdbbrowser/ui/MovieViewModel.kt,0/7/07f8c7eb0ba471639a35bfb51c6e64288d8e6231
+=app/src/main/java/com/m7019e/tmdbbrowser/ui/MovieViewModel.kt,0\7\07f8c7eb0ba471639a35bfb51c6e64288d8e6231
 I
 gradle/libs.versions.toml,d/7/d7595319a0658be6f1ed500ad590d42e4b28bc4f
 v
-Fapp/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieListScreen.kt,3/1/314076c830b96007a04ec9cd556884a737e70195
+Fapp/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieListScreen.kt,3\1\314076c830b96007a04ec9cd556884a737e70195
 x
-Happ/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieDetailScreen.kt,c/f/cfa26cfb9bb271602c3a6480b3155a8cab80b854
+Happ/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieDetailScreen.kt,c\f\cfa26cfb9bb271602c3a6480b3155a8cab80b854
+B
+secrets.properties,4\1\4117a40ac446e6d331063f729af6fa5868a63cc7
