@@ -1,14 +1,13 @@
 package com.m7019e.tmdbbrowser.ui
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.m7019e.tmdbbrowser.R
+import com.m7019e.tmdbbrowser.data.Movies
+import com.m7019e.tmdbbrowser.ui.screens.MovieListScreen
 
 @Composable
 fun TmdbBrowserApp() {
-    Text(text = stringResource(id = R.string.app_name))
+    MovieListScreen(movieList = Movies.getMovies())
 }
 
 @Preview(showBackground = true)
