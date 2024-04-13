@@ -84,7 +84,7 @@ fun MovieDetailsIMDBLink(movie: Movie, modifier: Modifier = Modifier) {
     Button(
         onClick = {
             val browserIntent =
-                Intent(Intent.ACTION_VIEW, Uri.parse(Constants.IMDB_BASE_URL + movie.homepage))
+                Intent(Intent.ACTION_VIEW, Uri.parse(Constants.IMDB_BASE_URL + movie.imdbId))
             ctx.startActivity(browserIntent)
         },
         shape = MaterialTheme.shapes.extraSmall,
