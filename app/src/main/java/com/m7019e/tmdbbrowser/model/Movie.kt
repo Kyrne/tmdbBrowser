@@ -2,6 +2,7 @@ package com.m7019e.tmdbbrowser.model
 
 import androidx.annotation.StringRes
 import com.m7019e.tmdbbrowser.R
+import java.util.Date
 
 
 /**
@@ -25,13 +26,13 @@ data class Movie(
     var homepage: String? = null
 )
 
-enum class Genre(@StringRes val genre_name: Int) {
-    ACTION(genre_name = R.string.genre_action),
-    ADVENTURE(genre_name = R.string.genre_adventure),
-    ANIMATION(genre_name = R.string.genre_animation),
-    COMEDY(genre_name = R.string.genre_comedy),
-    FAMILY(genre_name = R.string.genre_family),
-    FANTASY(genre_name = R.string.genre_fantasy),
-    SCIENCE_FICTION(genre_name = R.string.genre_science_fiction),
-    THRILLER(genre_name = R.string.genre_thriller)
+enum class Genre(@StringRes val genre: Int) {
+    ACTION(genre = R.string.genre_action),
+    ADVENTURE(genre = R.string.genre_adventure),
+    ANIMATION(genre = R.string.genre_animation),
+    COMEDY(genre = R.string.genre_comedy),
+    FAMILY(genre = R.string.genre_family),
+    FANTASY(genre = R.string.genre_fantasy),
+    SCIENCE_FICTION(genre = R.string.genre_science_fiction),
+    THRILLER(genre = R.string.genre_thriller)
 }

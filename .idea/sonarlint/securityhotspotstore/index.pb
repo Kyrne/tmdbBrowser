@@ -2,7 +2,7 @@
 9
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 h
-8app/src/main/java/com/m7019e/tmdbbrowser/MainActivity.kt,4/d/4da0f4eaf1602ac24078e17c304ca7597db8c34f
+8app/src/main/java/com/m7019e/tmdbbrowser/MainActivity.kt,4\d\4da0f4eaf1602ac24078e17c304ca7597db8c34f
 H
 .github/workflows/ci.yml,8/9/899ce9c202bf7bb5480e72836c3edc773c9c4244
 D
@@ -34,3 +34,11 @@ x
 Happ/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieDetailScreen.kt,c\f\cfa26cfb9bb271602c3a6480b3155a8cab80b854
 B
 secrets.properties,4\1\4117a40ac446e6d331063f729af6fa5868a63cc7
+i
+9app/src/main/java/com/m7019e/tmdbbrowser/ui/theme/Type.kt,c\f\cfdf3998f25c5d455630cbb9fedeaf019eb751dc
+j
+:app/src/main/java/com/m7019e/tmdbbrowser/ui/theme/Theme.kt,5\1\51adf870d1da1a58bfaed9393187a03f6dcde5cd
+j
+:app/src/main/java/com/m7019e/tmdbbrowser/ui/theme/Color.kt,1\8\186beb68bf29696a6981b50951e6453c4a5c37b4
+k
+;app/src/main/java/com/m7019e/tmdbbrowser/utils/utilities.kt,b\2\b2d5e9a03dc3fbe4e04c4057d6b787177eb1c2d8
