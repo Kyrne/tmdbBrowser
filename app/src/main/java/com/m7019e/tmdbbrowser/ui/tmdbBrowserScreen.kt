@@ -77,6 +77,10 @@ fun TmdbBrowserApp() {
                 uiState.currentMovie?.let { movie ->
                     MovieDetailsScreen(
                         movie = movie,
+                        isFavorite = viewModel.checkIfMovieIsFavorite(movie),
+                        onFavoriteClick = {
+                            viewModel.updateFavoriteMovie(movie)
+                        },
                         onUserRatingClick = {
                             viewModel.updateCurrentMovie(it) // Might be redundant
                             navController.navigate(TmdbBrowserScreen.UserRatings.name)

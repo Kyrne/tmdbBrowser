@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.twotone.ExitToApp
 import androidx.compose.material.icons.twotone.Star
@@ -38,9 +40,10 @@ import com.m7019e.tmdbbrowser.utils.Constants
 @Composable
 fun MovieDetailsScreen(
     movie: Movie,
+    isFavorite: Boolean,
+    onFavoriteClick: (Movie) -> Unit,
     onUserRatingClick: (Movie) -> Unit,
     onReviewClick: (Movie) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Column {
         Box(modifier = Modifier.fillMaxWidth()) {
@@ -51,7 +54,7 @@ fun MovieDetailsScreen(
             )
         }
         Box(modifier = Modifier.padding(start = 4.dp, end = 4.dp)) {
-            MovieDetails(movie, onUserRatingClick, onReviewClick)
+            MovieDetails(movie, isFavorite, onFavoriteClick, onUserRatingClick, onReviewClick)
         }
 
     }
@@ -59,13 +62,23 @@ fun MovieDetailsScreen(
 
 @Composable
 fun MovieDetails(
-    movie: Movie, onUserRatingClick: (Movie) -> Unit,
-    onCreateReviewClick: (Movie) -> Unit, modifier: Modifier = Modifier
+    movie: Movie,
+    isFavorite: Boolean,
+    onFavoriteClick: (Movie) -> Unit,
+    onUserRatingClick: (Movie) -> Unit,
+    onCreateReviewClick: (Movie) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column {
         MovieDetailsTitle(movie = movie)
         MovieDetailsGenreList(movie = movie)
-        MovieDetailsUserRating(movie = movie, onUserRatingClick, onCreateReviewClick)
+        MovieDetailsUserRating(
+            movie = movie,
+            isFavorite,
+            onFavoriteClick,
+            onUserRatingClick,
+            onCreateReviewClick
+        )
         MovieDetailsOverview(movie = movie)
         Row {
             if (movie.homepage != null) {
@@ -90,9 +103,13 @@ fun MovieDetails(
 
 @Composable
 fun MovieDetailsUserRating(
-    movie: Movie, onUserRatingClick: (Movie) -> Unit,
+    movie: Movie,
+    isFavorite: Boolean,
+    onFavoriteClick: (Movie) -> Unit,
+    onUserRatingClick: (Movie) -> Unit,
     onCreateReviewClick: (Movie) -> Unit,
 ) {
+
     Row {
         Button(
             onClick = { onUserRatingClick(movie) },
@@ -111,7 +128,6 @@ fun MovieDetailsUserRating(
                 Text(text = "%.2f/10".format(movie.userRating))
             }
         }
-        Spacer(modifier = Modifier.weight(1f))
         Button(
             onClick = { onCreateReviewClick(movie) },
             shape = RectangleShape,
@@ -129,13 +145,35 @@ fun MovieDetailsUserRating(
                 Text(text = stringResource(id = R.string.review_button))
             }
         }
+        Button(
+            onClick = { onFavoriteClick(movie) },
+            shape = RectangleShape,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+            ),
+            modifier = Modifier.weight(2f)
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(
+                    imageVector = if (isFavorite) {
+                        Icons.Filled.Favorite
+                    } else {
+                        Icons.Filled.FavoriteBorder
+                    },
+                    contentDescription = stringResource(id = R.string.favorite_button)
+                )
+                Text(text = stringResource(id = R.string.favorite_button_label))
+            }
+
+        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun MovieDetailsUserRatingPreview() {
-    MovieDetailsUserRating(movie = Movies.defaultMovie, {}, {})
+    MovieDetailsUserRating(movie = Movies.defaultMovie, isFavorite = false, {}, {}, {})
 }
 
 @Composable
@@ -238,5 +276,5 @@ fun MovieDetailsGenreList(movie: Movie) {
 @Preview(showBackground = true)
 @Composable
 fun MovieDetailsPreview() {
-    MovieDetails(Movies.getMovies()[0], {}, {})
+    MovieDetails(Movies.getMovies()[0], isFavorite = true, {}, {}, {})
 }

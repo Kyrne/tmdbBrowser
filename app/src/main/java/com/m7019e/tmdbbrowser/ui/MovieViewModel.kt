@@ -21,8 +21,24 @@ class MovieViewModel : ViewModel() {
             it.copy(currentMovie = selectedMovie)
         }
     }
+
+    fun updateFavoriteMovie(selectedMovie: Movie) {
+        val favoriteState: Boolean = checkIfMovieIsFavorite(selectedMovie)
+        _uiState.update {
+            it.copy(favorites = uiState.value.favorites + mapOf(selectedMovie to !favoriteState))
+        }
+    }
+
+    /**
+     * Returns true if movie is marked as favorite, otherwise returns false
+     */
+    fun checkIfMovieIsFavorite(selectedMovie: Movie): Boolean {
+        return uiState.value.favorites[selectedMovie] ?: false
+    }
+
 }
 
 data class MovieUiState(
-    val currentMovie: Movie? = null
+    val currentMovie: Movie? = null,
+    val favorites: Map<Movie, Boolean> = emptyMap()
 )
