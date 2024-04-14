@@ -10,9 +10,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.twotone.ExitToApp
+import androidx.compose.material.icons.twotone.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -21,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -34,7 +36,12 @@ import com.m7019e.tmdbbrowser.model.Movie
 import com.m7019e.tmdbbrowser.utils.Constants
 
 @Composable
-fun MovieDetailsScreen(movie: Movie, modifier: Modifier = Modifier) {
+fun MovieDetailsScreen(
+    movie: Movie,
+    onUserRatingClick: (Movie) -> Unit,
+    onReviewClick: (Movie) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column {
         Box(modifier = Modifier.fillMaxWidth()) {
             AsyncImage(
@@ -44,18 +51,21 @@ fun MovieDetailsScreen(movie: Movie, modifier: Modifier = Modifier) {
             )
         }
         Box(modifier = Modifier.padding(start = 4.dp, end = 4.dp)) {
-            MovieDetails(movie)
+            MovieDetails(movie, onUserRatingClick, onReviewClick)
         }
 
     }
 }
 
 @Composable
-fun MovieDetails(movie: Movie, modifier: Modifier = Modifier) {
+fun MovieDetails(
+    movie: Movie, onUserRatingClick: (Movie) -> Unit,
+    onCreateReviewClick: (Movie) -> Unit, modifier: Modifier = Modifier
+) {
     Column {
         MovieDetailsTitle(movie = movie)
         MovieDetailsGenreList(movie = movie)
-        Spacer(modifier = Modifier.size(8.dp))
+        MovieDetailsUserRating(movie = movie, onUserRatingClick, onCreateReviewClick)
         MovieDetailsOverview(movie = movie)
         Row {
             if (movie.homepage != null) {
@@ -76,6 +86,56 @@ fun MovieDetails(movie: Movie, modifier: Modifier = Modifier) {
 
 
     }
+}
+
+@Composable
+fun MovieDetailsUserRating(
+    movie: Movie, onUserRatingClick: (Movie) -> Unit,
+    onCreateReviewClick: (Movie) -> Unit,
+) {
+    Row {
+        Button(
+            onClick = { onUserRatingClick(movie) },
+            shape = RectangleShape,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface
+            ),
+            modifier = Modifier.weight(2f)
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(
+                    imageVector = Icons.Filled.Star,
+                    contentDescription = stringResource(id = R.string.icon_star)
+                )
+                Text(text = "%.2f/10".format(movie.userRating))
+            }
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        Button(
+            onClick = { onCreateReviewClick(movie) },
+            shape = RectangleShape,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+            ),
+            modifier = Modifier.weight(2f)
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(
+                    imageVector = Icons.TwoTone.Star,
+                    contentDescription = stringResource(id = R.string.icon_star)
+                )
+                Text(text = stringResource(id = R.string.review_button))
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MovieDetailsUserRatingPreview() {
+    MovieDetailsUserRating(movie = Movies.defaultMovie, {}, {})
 }
 
 @Composable
@@ -178,5 +238,5 @@ fun MovieDetailsGenreList(movie: Movie) {
 @Preview(showBackground = true)
 @Composable
 fun MovieDetailsPreview() {
-    MovieDetails(Movies.getMovies()[0])
+    MovieDetails(Movies.getMovies()[0], {}, {})
 }
