@@ -23,6 +23,7 @@ data class Movie(
     var backdropPath: String,
     var releaseDate: String,
     var overview: String,
+    var userRating: Float,
     var genres: List<Genre>,
     var homepage: String? = null
 )

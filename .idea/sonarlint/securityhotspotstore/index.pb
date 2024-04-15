@@ -42,3 +42,7 @@ j
 :app/src/main/java/com/m7019e/tmdbbrowser/ui/theme/Color.kt,1\8\186beb68bf29696a6981b50951e6453c4a5c37b4
 k
 ;app/src/main/java/com/m7019e/tmdbbrowser/utils/utilities.kt,b\2\b2d5e9a03dc3fbe4e04c4057d6b787177eb1c2d8
+}
+Mapp/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieUserRatingsScreen.kt,d\3\d3848cd582de56a7b36b83f5b21bd88b2b121bdc
+~
+Napp/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieCreateReviewScreen.kt,f\0\f0853438cbb6f79653896891d437b1f204bb9969

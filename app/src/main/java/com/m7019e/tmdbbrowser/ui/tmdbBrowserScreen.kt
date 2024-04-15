@@ -3,8 +3,6 @@ package com.m7019e.tmdbbrowser.ui
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,12 +27,16 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.m7019e.tmdbbrowser.R
 import com.m7019e.tmdbbrowser.data.Movies
+import com.m7019e.tmdbbrowser.ui.screens.MovieCreateReviewScreen
 import com.m7019e.tmdbbrowser.ui.screens.MovieListScreen
+import com.m7019e.tmdbbrowser.ui.screens.MovieUserRatingsScreen
 import com.m7019e.tmdbbrowser.ui.screens.movie.MovieDetailsScreen
 
 enum class TmdbBrowserScreen(@StringRes val title: Int) {
     List(title = R.string.app_name),
-    Details(title = R.string.movie_details)
+    Details(title = R.string.movie_details),
+    UserRatings(title = R.string.user_ratings),
+    CreateReview(title = R.string.create_review)
 }
 
 @Composable
@@ -71,10 +73,33 @@ fun TmdbBrowserApp() {
                     modifier = Modifier.fillMaxSize()
                 )
             }
-
             composable(route = TmdbBrowserScreen.Details.name) {
                 uiState.currentMovie?.let { movie ->
-                    MovieDetailsScreen(movie = movie)
+                    MovieDetailsScreen(
+                        movie = movie,
+                        isFavorite = viewModel.checkIfMovieIsFavorite(movie),
+                        onFavoriteClick = {
+                            viewModel.updateFavoriteMovie(movie)
+                        },
+                        onUserRatingClick = {
+                            viewModel.updateCurrentMovie(it) // Might be redundant
+                            navController.navigate(TmdbBrowserScreen.UserRatings.name)
+                        },
+                        onReviewClick = {
+                            viewModel.updateCurrentMovie(it) // Might be redundant
+                            navController.navigate(TmdbBrowserScreen.CreateReview.name)
+                        })
+                }
+            }
+            composable(route = TmdbBrowserScreen.UserRatings.name) {
+                uiState.currentMovie?.let { movie ->
+                    MovieUserRatingsScreen(movie = movie)
+                }
+            }
+            composable(route = TmdbBrowserScreen.CreateReview.name) {
+                uiState.currentMovie?.let { movie ->
+                    MovieCreateReviewScreen(movie = movie)
+
                 }
             }
         }

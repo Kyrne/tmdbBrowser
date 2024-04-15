@@ -13,4 +13,10 @@
     <string name="genre_family">Family</string>
     <string name="genre_thriller">Thriller</string>
     <string name="overview">Overview</string>
+    <string name="icon_star">Rating</string>
+    <string name="review_button">Rate this</string>
+    <string name="user_ratings">User Ratings</string>
+    <string name="create_review">Create Review</string>
+    <string name="favorite_button">Favorite this</string>
+    <string name="favorite_button_label">Favorite</string>
 </resources>
