@@ -31,19 +31,42 @@ import coil.compose.AsyncImage
 import com.m7019e.tmdbbrowser.R
 import com.m7019e.tmdbbrowser.data.Movies
 import com.m7019e.tmdbbrowser.model.Movie
+import com.m7019e.tmdbbrowser.ui.MovieListUiState
 import com.m7019e.tmdbbrowser.ui.screens.movie.MovieDetailsGenreList
 import com.m7019e.tmdbbrowser.utils.Constants
 
 
 @Composable
 fun MovieListScreen(
-    movieList: List<Movie>,
+    movieListUiState: MovieListUiState,
     onMovieClick: (Movie) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
-        items(movieList) { movie ->
-            MovieListCard(movie = movie, onClick = onMovieClick)
+        when (movieListUiState) {
+            is MovieListUiState.Success -> {
+                items(movieListUiState.movies) { movie ->
+                    MovieListCard(movie = movie, onClick = onMovieClick)
+                }
+            }
+
+            is MovieListUiState.Loading -> {
+                item {
+                    Text(
+                        text = stringResource(id = R.string.api_loading_message),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+
+            is MovieListUiState.Error -> {
+                item {
+                    Text(
+                        text = stringResource(id = R.string.api_error_message),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
         }
     }
 }

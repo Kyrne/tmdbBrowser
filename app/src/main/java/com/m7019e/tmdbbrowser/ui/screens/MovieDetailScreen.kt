@@ -35,28 +35,54 @@ import coil.compose.AsyncImage
 import com.m7019e.tmdbbrowser.R
 import com.m7019e.tmdbbrowser.data.Movies
 import com.m7019e.tmdbbrowser.model.Movie
+import com.m7019e.tmdbbrowser.ui.SelectedMovieUiState
 import com.m7019e.tmdbbrowser.utils.Constants
 
 @Composable
 fun MovieDetailsScreen(
-    movie: Movie,
+    selectedMovieUiState: SelectedMovieUiState,
     isFavorite: Boolean,
     onFavoriteClick: (Movie) -> Unit,
     onUserRatingClick: (Movie) -> Unit,
     onReviewClick: (Movie) -> Unit,
 ) {
-    Column {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            AsyncImage(
-                model = Constants.BACKDROP_IMAGE_BASE_URL + Constants.BACKDROP_IMAGE_WIDTH + movie.backdropPath,
-                contentDescription = movie.title,
-                contentScale = ContentScale.Fit
-            )
-        }
-        Box(modifier = Modifier.padding(start = 4.dp, end = 4.dp)) {
-            MovieDetails(movie, isFavorite, onFavoriteClick, onUserRatingClick, onReviewClick)
+    when (selectedMovieUiState) {
+        is SelectedMovieUiState.Success -> {
+            Column {
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    AsyncImage(
+                        model = Constants.BACKDROP_IMAGE_BASE_URL + Constants.BACKDROP_IMAGE_WIDTH + selectedMovieUiState.movie.backdropPath,
+                        contentDescription = selectedMovieUiState.movie.title,
+                        contentScale = ContentScale.Fit
+                    )
+                }
+                Box(modifier = Modifier.padding(start = 4.dp, end = 4.dp)) {
+                    MovieDetails(
+                        selectedMovieUiState.movie,
+                        isFavorite,
+                        onFavoriteClick,
+                        onUserRatingClick,
+                        onReviewClick
+                    )
+                }
+
+            }
         }
 
+        is SelectedMovieUiState.Loading -> {
+            Text(
+                text = stringResource(id = R.string.api_loading_message),
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+
+        is SelectedMovieUiState.Error -> {
+            Text(
+                text = stringResource(id = R.string.api_error_message),
+                style = MaterialTheme.typography.bodyMedium
+            )
+
+        }
     }
 }
 
@@ -81,7 +107,7 @@ fun MovieDetails(
         )
         MovieDetailsOverview(movie = movie)
         Row {
-            if (movie.homepage != null) {
+            if (movie.homepage.isNotEmpty()) {
                 MovieDetailsLinkToHomepage(
                     movie = movie,
                     modifier = Modifier
@@ -89,12 +115,14 @@ fun MovieDetails(
                         .padding(horizontal = 8.dp, vertical = 8.dp)
                 )
             }
-            MovieDetailsIMDBLink(
-                movie = movie,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 8.dp, vertical = 8.dp)
-            )
+            if (movie.imdbId.isNotEmpty()) {
+                MovieDetailsIMDBLink(
+                    movie = movie,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 8.dp, vertical = 8.dp)
+                )
+            }
         }
 
 
@@ -263,9 +291,9 @@ fun MovieDetailsTitle(movie: Movie) {
 @Composable
 fun MovieDetailsGenreList(movie: Movie) {
     FlowRow(Modifier.fillMaxWidth()) {
-        repeat(movie.genres.size) {
+        for (genre in movie.genreList) {
             Text(
-                text = stringResource(id = movie.genres[it].genre),
+                text = genre,
                 style = MaterialTheme.typography.labelLarge,
                 modifier = Modifier.padding(end = 4.dp)
             )

@@ -19,4 +19,6 @@
     <string name="create_review">Create Review</string>
     <string name="favorite_button">Favorite this</string>
     <string name="favorite_button_label">Favorite</string>
+    <string name="api_loading_message">Loading...</string>
+    <string name="api_error_message">Error</string>
 </resources>
