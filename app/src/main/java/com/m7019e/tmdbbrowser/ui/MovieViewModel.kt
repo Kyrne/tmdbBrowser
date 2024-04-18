@@ -55,7 +55,7 @@ class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel
 
     var reviewUiState: ReviewUiState by mutableStateOf(ReviewUiState.Loading)
         private set
-
+    
     var genreMap: Map<Int, String> = mapOf()
         private set
 
@@ -72,7 +72,6 @@ class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel
         } catch (e: HttpException) {
             mapOf()
         }
-
     }
 
     fun getPopularMovies() {

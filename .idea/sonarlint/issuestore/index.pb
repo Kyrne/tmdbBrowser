@@ -70,3 +70,5 @@ h
 8app/src/main/java/com/m7019e/tmdbbrowser/model/Review.kt,c\d\cd5a9b41958f0519e85f684176a37e39628a8c50
 y
 Iapp/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieReviewsScreen.kt,d\9\d94f70ca1f8478680d814f02e012f847bb27df98
+z
+Japp/src/main/java/com/m7019e/tmdbbrowser/ui/screens/ReviewDetailsScreen.kt,7\e\7ee9768361fc4e34ca173d04ce61a9411eb46988

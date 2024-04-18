@@ -22,4 +22,5 @@
     <string name="api_loading_message">Loading...</string>
     <string name="api_error_message">Error</string>
     <string name="layout_button">Change layout</string>
+    <string name="review_details">Review details</string>
 </resources>

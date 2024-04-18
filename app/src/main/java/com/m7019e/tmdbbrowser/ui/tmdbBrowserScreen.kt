@@ -35,7 +35,8 @@ enum class TmdbBrowserScreen(@StringRes val title: Int) {
     List(title = R.string.app_name),
     Details(title = R.string.movie_details),
     MovieReviews(title = R.string.user_ratings),
-    CreateReview(title = R.string.create_review)
+    CreateReview(title = R.string.create_review),
+    ReviewDetails(title = R.string.review_details)
 }
 
 @Composable
@@ -106,6 +107,7 @@ fun TmdbBrowserApp() {
             composable(route = TmdbBrowserScreen.MovieReviews.name) {
                 MovieReviewsScreen(reviewUiState = movieViewModel.reviewUiState)
             }
+
             /*
             composable(route = TmdbBrowserScreen.CreateReview.name) {
                 MovieCreateReviewScreen(selectedMovieUiState = movieViewModel.selectedMovieUiState)
