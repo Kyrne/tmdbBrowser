@@ -147,11 +147,13 @@ fun TmdbBrowserAppBar(
             }
         },
         actions = {
-            IconButton(onClick = changeLayout) {
-                Icon(
-                    imageVector = Icons.Filled.List,
-                    contentDescription = stringResource(id = R.string.layout_button)
-                )
+            if (currentScreen == TmdbBrowserScreen.List) {
+                IconButton(onClick = changeLayout) {
+                    Icon(
+                        imageVector = Icons.Filled.List,
+                        contentDescription = stringResource(id = R.string.layout_button)
+                    )
+                }
             }
 
         }
