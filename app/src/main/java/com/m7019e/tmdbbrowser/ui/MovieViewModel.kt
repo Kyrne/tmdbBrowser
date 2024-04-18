@@ -30,12 +30,19 @@ sealed interface SelectedMovieUiState {
     object Loading : SelectedMovieUiState
 }
 
+enum class Layout {
+    GRID, LIST
+}
+
 class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel() {
 
     var movieListUiState: MovieListUiState by mutableStateOf(MovieListUiState.Loading)
         private set
 
     var selectedMovieUiState: SelectedMovieUiState by mutableStateOf(SelectedMovieUiState.Loading)
+        private set
+
+    var movieUiLayout: Layout by mutableStateOf(Layout.GRID)
         private set
 
     var genreMap: Map<Int, String> = mapOf()
@@ -102,6 +109,13 @@ class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel
         }
     }
 
+    fun changeLayout() {
+        movieUiLayout = if (movieUiLayout == Layout.GRID) {
+            Layout.LIST
+        } else {
+            Layout.GRID
+        }
+    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
