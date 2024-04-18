@@ -17,7 +17,7 @@ D
 P
  app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
 g
-7app/src/main/java/com/m7019e/tmdbbrowser/model/Movie.kt,f/d/fd114c89bf40a5e47290f26922f648023b9de03b
+7app/src/main/java/com/m7019e/tmdbbrowser/model/Movie.kt,f\d\fd114c89bf40a5e47290f26922f648023b9de03b
 g
 7app/src/main/java/com/m7019e/tmdbbrowser/data/Movies.kt,c\6\c6897f726f92967a84035e425190fb9fbb57cfca
 p
@@ -31,7 +31,7 @@ I
 v
 Fapp/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieListScreen.kt,3\1\314076c830b96007a04ec9cd556884a737e70195
 x
-Happ/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieDetailScreen.kt,c/f/cfa26cfb9bb271602c3a6480b3155a8cab80b854
+Happ/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieDetailScreen.kt,c\f\cfa26cfb9bb271602c3a6480b3155a8cab80b854
 B
 secrets.properties,4\1\4117a40ac446e6d331063f729af6fa5868a63cc7
 i
@@ -45,13 +45,13 @@ Mapp/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieUserRatingsScreen.kt,
 ~
 Napp/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieCreateReviewScreen.kt,f/0/f0853438cbb6f79653896891d437b1f204bb9969
 m
-=app/src/main/java/com/m7019e/tmdbbrowser/data/AppContainer.kt,b/e/bec836e1280978d026f75898bb999be4b9541d99
+=app/src/main/java/com/m7019e/tmdbbrowser/data/AppContainer.kt,b\e\bec836e1280978d026f75898bb999be4b9541d99
 q
-Aapp/src/main/java/com/m7019e/tmdbbrowser/data/MoviesRepository.kt,a/3/a342a8cdc56e1e5d089e435186c33b77b5f9ebd0
+Aapp/src/main/java/com/m7019e/tmdbbrowser/data/MoviesRepository.kt,a\3\a342a8cdc56e1e5d089e435186c33b77b5f9ebd0
 o
-?app/src/main/java/com/m7019e/tmdbbrowser/model/MovieResponse.kt,a/d/ad5cb329c8ea05f891f9d3a00d625300e6f31f1b
+?app/src/main/java/com/m7019e/tmdbbrowser/model/MovieResponse.kt,a\d\ad5cb329c8ea05f891f9d3a00d625300e6f31f1b
 r
-Bapp/src/main/java/com/m7019e/tmdbbrowser/network/TMDBApiService.kt,1/a/1ab3a4b499b3a8821263131cca5a55a7128bad30
+Bapp/src/main/java/com/m7019e/tmdbbrowser/network/TMDBApiService.kt,1\a\1ab3a4b499b3a8821263131cca5a55a7128bad30
 k
 ;app/src/main/java/com/m7019e/tmdbbrowser/TMDBApplication.kt,b/9/b9832035b6aaa13cb0bdfb4f67e6bc2e451b209f
 n
@@ -64,3 +64,9 @@ g
 7app/src/main/java/com/m7019e/tmdbbrowser/model/Genre.kt,9/d/9d150a72c4f141c38bc2dcd8df5df0a6fd444478
 |
 Lapp/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieGridLayoutScreen.kt,7\7\77c086838349aa3767a55d81ffc20e1fed636e16
+u
+Eapp/src/main/java/com/m7019e/tmdbbrowser/model/MovieReviewResponse.kt,d\b\db5b8c8fcbc5e3e6ac3ce881911b91891a7ae7b2
+h
+8app/src/main/java/com/m7019e/tmdbbrowser/model/Review.kt,c\d\cd5a9b41958f0519e85f684176a37e39628a8c50
+y
+Iapp/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieReviewsScreen.kt,d\9\d94f70ca1f8478680d814f02e012f847bb27df98

@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.m7019e.tmdbbrowser.TMDBApplication
 import com.m7019e.tmdbbrowser.data.MoviesRepository
 import com.m7019e.tmdbbrowser.model.Movie
+import com.m7019e.tmdbbrowser.model.Review
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import retrofit2.HttpException
@@ -30,6 +31,13 @@ sealed interface SelectedMovieUiState {
     object Loading : SelectedMovieUiState
 }
 
+sealed interface ReviewUiState {
+    data class Success(val reviews: List<Review>) : ReviewUiState
+    object Error : ReviewUiState
+    object Loading : ReviewUiState
+}
+
+
 enum class Layout {
     GRID, LIST
 }
@@ -43,6 +51,9 @@ class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel
         private set
 
     var movieUiLayout: Layout by mutableStateOf(Layout.GRID)
+        private set
+
+    var reviewUiState: ReviewUiState by mutableStateOf(ReviewUiState.Loading)
         private set
 
     var genreMap: Map<Int, String> = mapOf()
@@ -114,6 +125,19 @@ class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel
             Layout.LIST
         } else {
             Layout.GRID
+        }
+    }
+
+    fun getMovieReviews(movie: Movie) {
+        viewModelScope.launch {
+            reviewUiState = ReviewUiState.Loading
+            reviewUiState = try {
+                ReviewUiState.Success(moviesRepository.getMovieReviews(movie).reviews)
+            } catch (e: IOException) {
+                ReviewUiState.Error
+            } catch (e: HttpException) {
+                ReviewUiState.Error
+            }
         }
     }
 

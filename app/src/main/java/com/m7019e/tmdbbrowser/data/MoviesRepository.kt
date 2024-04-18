@@ -2,6 +2,7 @@ package com.m7019e.tmdbbrowser.data
 
 import com.m7019e.tmdbbrowser.model.Movie
 import com.m7019e.tmdbbrowser.model.MovieResponse
+import com.m7019e.tmdbbrowser.model.MovieReviewResponse
 import com.m7019e.tmdbbrowser.network.TMDBApiService
 
 interface MoviesRepository {
@@ -9,6 +10,7 @@ interface MoviesRepository {
     suspend fun getTopRatedMovies(): MovieResponse
     suspend fun getMovieDetails(movie: Movie): Movie
     suspend fun getGenreList(): Map<Int, String>
+    suspend fun getMovieReviews(movie: Movie): MovieReviewResponse
 }
 
 class NetworkMoviesRepository(private val apiService: TMDBApiService) : MoviesRepository {
@@ -28,6 +30,10 @@ class NetworkMoviesRepository(private val apiService: TMDBApiService) : MoviesRe
         return apiService.getGenreList().genres.associate {
             it.id to it.name
         }
+    }
+
+    override suspend fun getMovieReviews(movie: Movie): MovieReviewResponse {
+        return apiService.getMovieReviews(movie.id.toString())
     }
 
 }

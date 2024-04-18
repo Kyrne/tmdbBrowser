@@ -28,12 +28,13 @@ import androidx.navigation.compose.rememberNavController
 import com.m7019e.tmdbbrowser.R
 import com.m7019e.tmdbbrowser.ui.screens.MovieGridLayoutScreen
 import com.m7019e.tmdbbrowser.ui.screens.MovieListScreen
+import com.m7019e.tmdbbrowser.ui.screens.MovieReviewsScreen
 import com.m7019e.tmdbbrowser.ui.screens.movie.MovieDetailsScreen
 
 enum class TmdbBrowserScreen(@StringRes val title: Int) {
     List(title = R.string.app_name),
     Details(title = R.string.movie_details),
-    UserRatings(title = R.string.user_ratings),
+    MovieReviews(title = R.string.user_ratings),
     CreateReview(title = R.string.create_review)
 }
 
@@ -94,17 +95,18 @@ fun TmdbBrowserApp() {
                     isFavorite = false,
                     onFavoriteClick = {
                     },
-                    onUserRatingClick = {
-                        navController.navigate(TmdbBrowserScreen.UserRatings.name)
+                    onUserRatingClick = { movie ->
+                        movieViewModel.getMovieReviews(movie)
+                        navController.navigate(TmdbBrowserScreen.MovieReviews.name)
                     },
                     onReviewClick = {
                         navController.navigate(TmdbBrowserScreen.CreateReview.name)
                     })
             }
-            /*
-            composable(route = TmdbBrowserScreen.UserRatings.name) {
-                MovieUserRatingsScreen(selectedMovieUiState = movieViewModel.selectedMovieUiState)
+            composable(route = TmdbBrowserScreen.MovieReviews.name) {
+                MovieReviewsScreen(reviewUiState = movieViewModel.reviewUiState)
             }
+            /*
             composable(route = TmdbBrowserScreen.CreateReview.name) {
                 MovieCreateReviewScreen(selectedMovieUiState = movieViewModel.selectedMovieUiState)
 
