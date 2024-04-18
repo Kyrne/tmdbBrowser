@@ -1,44 +1,116 @@
 package com.m7019e.tmdbbrowser.ui
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.m7019e.tmdbbrowser.data.Movies
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.m7019e.tmdbbrowser.TMDBApplication
+import com.m7019e.tmdbbrowser.data.MoviesRepository
 import com.m7019e.tmdbbrowser.model.Movie
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import retrofit2.HttpException
+import java.io.IOException
 
-class MovieViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(MovieUiState(
-        currentMovie = Movies.getMovies().getOrElse(0) {
-            Movies.defaultMovie
+
+sealed interface MovieListUiState {
+    data class Success(val movies: List<Movie>) : MovieListUiState
+    object Error : MovieListUiState
+    object Loading : MovieListUiState
+}
+
+sealed interface SelectedMovieUiState {
+    data class Success(val movie: Movie) : SelectedMovieUiState
+    object Error : SelectedMovieUiState
+    object Loading : SelectedMovieUiState
+}
+
+class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel() {
+
+    var movieListUiState: MovieListUiState by mutableStateOf(MovieListUiState.Loading)
+        private set
+
+    var selectedMovieUiState: SelectedMovieUiState by mutableStateOf(SelectedMovieUiState.Loading)
+        private set
+
+    var genreMap: Map<Int, String> = mapOf()
+        private set
+
+    init {
+        runBlocking { getGenreList() }
+        getPopularMovies()
+    }
+
+    private suspend fun getGenreList() {
+        genreMap = try {
+            moviesRepository.getGenreList()
+        } catch (e: IOException) {
+            mapOf()
+        } catch (e: HttpException) {
+            mapOf()
         }
-    ))
 
-    val uiState: StateFlow<MovieUiState> = _uiState
+    }
 
-    fun updateCurrentMovie(selectedMovie: Movie) {
-        _uiState.update {
-            it.copy(currentMovie = selectedMovie)
+    fun getPopularMovies() {
+        viewModelScope.launch {
+            movieListUiState = MovieListUiState.Loading
+            movieListUiState = try {
+                val movieList = moviesRepository.getPopularMovies().results
+                for (movie in movieList) {
+                    movie.setGenreList(genreMap)
+                }
+                MovieListUiState.Success(movieList)
+            } catch (e: IOException) {
+                MovieListUiState.Error
+            } catch (e: HttpException) {
+                MovieListUiState.Error
+            }
         }
     }
 
-    fun updateFavoriteMovie(selectedMovie: Movie) {
-        val favoriteState: Boolean = checkIfMovieIsFavorite(selectedMovie)
-        _uiState.update {
-            it.copy(favorites = uiState.value.favorites + mapOf(selectedMovie to !favoriteState))
+    fun getTopRatedMovies() {
+        viewModelScope.launch {
+            movieListUiState = MovieListUiState.Loading
+            movieListUiState = try {
+                MovieListUiState.Success(moviesRepository.getTopRatedMovies().results)
+            } catch (e: IOException) {
+                MovieListUiState.Error
+            } catch (e: HttpException) {
+                MovieListUiState.Error
+            }
         }
     }
 
-    /**
-     * Returns true if movie is marked as favorite, otherwise returns false
-     */
-    fun checkIfMovieIsFavorite(selectedMovie: Movie): Boolean {
-        return uiState.value.favorites[selectedMovie] ?: false
+    fun setSelectedMovie(movie: Movie) {
+        viewModelScope.launch {
+            selectedMovieUiState = SelectedMovieUiState.Loading
+            selectedMovieUiState = try {
+                val details: Movie = moviesRepository.getMovieDetails(movie)
+                movie.updateDetails(details)
+                SelectedMovieUiState.Success(movie)
+            } catch (e: IOException) {
+                SelectedMovieUiState.Error
+            } catch (e: HttpException) {
+                SelectedMovieUiState.Error
+            }
+        }
+    }
+
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = (this[APPLICATION_KEY] as TMDBApplication)
+                val moviesRepository = application.container.moviesRepository
+                MovieViewModel(moviesRepository = moviesRepository)
+            }
+        }
     }
 
 }
-
-data class MovieUiState(
-    val currentMovie: Movie? = null,
-    val favorites: Map<Movie, Boolean> = emptyMap()
-)

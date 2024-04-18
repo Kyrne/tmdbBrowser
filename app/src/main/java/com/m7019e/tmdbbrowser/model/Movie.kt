@@ -1,40 +1,73 @@
 package com.m7019e.tmdbbrowser.model
 
-import androidx.annotation.StringRes
-import com.m7019e.tmdbbrowser.R
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 
 /**
  * A class representing a *movie* and it's details
  *
- * @param tmdbId movie id on TMDB
- * @param imdbId movie id on IMDB
+ * @param id movie id on TMDB
  * @param title movie title
  * @param posterPath path to poster used in the movie list
  * @param backdropPath path to backdrop used in detail page
  * @param releaseDate release date of the movie in YYYY-MM-DD
  * @param overview a short description of the movie
  */
+@Serializable
 data class Movie(
-    var tmdbId: Int,
-    var imdbId: String,
-    var title: String,
-    var posterPath: String,
-    var backdropPath: String,
-    var releaseDate: String,
-    var overview: String,
-    var userRating: Float,
-    var genres: List<Genre>,
-    var homepage: String? = null
-)
+    @SerialName(value = "id")
+    var id: Long = 0L,
 
-enum class Genre(@StringRes val genre: Int) {
-    ACTION(genre = R.string.genre_action),
-    ADVENTURE(genre = R.string.genre_adventure),
-    ANIMATION(genre = R.string.genre_animation),
-    COMEDY(genre = R.string.genre_comedy),
-    FAMILY(genre = R.string.genre_family),
-    FANTASY(genre = R.string.genre_fantasy),
-    SCIENCE_FICTION(genre = R.string.genre_science_fiction),
-    THRILLER(genre = R.string.genre_thriller)
+    @SerialName(value = "title")
+    var title: String = "",
+
+    @SerialName(value = "poster_path")
+    var posterPath: String = "",
+
+    @SerialName(value = "backdrop_path")
+    var backdropPath: String = "",
+
+    @SerialName(value = "release_date")
+    var releaseDate: String = "",
+
+    @SerialName(value = "overview")
+    var overview: String = "",
+
+    @SerialName(value = "vote_average")
+    var userRating: Float = 0f,
+
+    @SerialName(value = "genre_ids")
+    var genre_ids: List<Int> = listOf(),
+
+    var genreList: List<String> = listOf(),
+
+    @SerialName(value = "homepage")
+    var homepage: String = "",
+
+    @SerialName(value = "imdb_id")
+    var imdbId: String = "",
+
+
+    ) {
+    fun updateDetails(details: Movie) {
+        if (details.homepage.isNotEmpty()) {
+            this.homepage = details.homepage
+        }
+        if (details.imdbId.isNotEmpty()) {
+            this.imdbId = details.imdbId
+        }
+    }
+
+    fun setGenreList(genreMap: Map<Int, String>) {
+        val genreList: MutableList<String> = mutableListOf()
+        for (genreId in this.genre_ids) {
+            val genre = genreMap[genreId]
+            if (genre != null) {
+                genreList += genre
+            }
+        }
+        this.genreList = genreList
+    }
 }
+

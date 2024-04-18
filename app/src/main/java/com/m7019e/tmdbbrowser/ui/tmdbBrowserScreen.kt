@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,10 +25,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.m7019e.tmdbbrowser.R
-import com.m7019e.tmdbbrowser.data.Movies
-import com.m7019e.tmdbbrowser.ui.screens.MovieCreateReviewScreen
 import com.m7019e.tmdbbrowser.ui.screens.MovieListScreen
-import com.m7019e.tmdbbrowser.ui.screens.MovieUserRatingsScreen
 import com.m7019e.tmdbbrowser.ui.screens.movie.MovieDetailsScreen
 
 enum class TmdbBrowserScreen(@StringRes val title: Int) {
@@ -41,7 +37,6 @@ enum class TmdbBrowserScreen(@StringRes val title: Int) {
 
 @Composable
 fun TmdbBrowserApp() {
-    val viewModel: MovieViewModel = viewModel()
     val navController: NavHostController = rememberNavController()
     // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -54,7 +49,7 @@ fun TmdbBrowserApp() {
             canNavigateBack = navController.previousBackStackEntry != null,
             navigateUp = { navController.navigateUp() })
     }) { innerPadding ->
-        val uiState by viewModel.uiState.collectAsState()
+        val movieViewModel: MovieViewModel = viewModel(factory = MovieViewModel.Factory)
 
         NavHost(
             navController = navController,
@@ -65,43 +60,37 @@ fun TmdbBrowserApp() {
         ) {
             composable(route = TmdbBrowserScreen.List.name) {
                 MovieListScreen(
-                    movieList = Movies.getMovies(),
+                    movieListUiState = movieViewModel.movieListUiState,
                     onMovieClick = { movie ->
-                        viewModel.updateCurrentMovie(movie)
+                        movieViewModel.setSelectedMovie(movie)
                         navController.navigate(TmdbBrowserScreen.Details.name)
                     },
                     modifier = Modifier.fillMaxSize()
                 )
             }
             composable(route = TmdbBrowserScreen.Details.name) {
-                uiState.currentMovie?.let { movie ->
-                    MovieDetailsScreen(
-                        movie = movie,
-                        isFavorite = viewModel.checkIfMovieIsFavorite(movie),
-                        onFavoriteClick = {
-                            viewModel.updateFavoriteMovie(movie)
-                        },
-                        onUserRatingClick = {
-                            viewModel.updateCurrentMovie(it) // Might be redundant
-                            navController.navigate(TmdbBrowserScreen.UserRatings.name)
-                        },
-                        onReviewClick = {
-                            viewModel.updateCurrentMovie(it) // Might be redundant
-                            navController.navigate(TmdbBrowserScreen.CreateReview.name)
-                        })
-                }
+                MovieDetailsScreen(
+                    selectedMovieUiState = movieViewModel.selectedMovieUiState,
+                    isFavorite = false,
+                    onFavoriteClick = {
+                    },
+                    onUserRatingClick = {
+                        navController.navigate(TmdbBrowserScreen.UserRatings.name)
+                    },
+                    onReviewClick = {
+                        navController.navigate(TmdbBrowserScreen.CreateReview.name)
+                    })
             }
+            /*
             composable(route = TmdbBrowserScreen.UserRatings.name) {
-                uiState.currentMovie?.let { movie ->
-                    MovieUserRatingsScreen(movie = movie)
-                }
+                MovieUserRatingsScreen(selectedMovieUiState = movieViewModel.selectedMovieUiState)
             }
             composable(route = TmdbBrowserScreen.CreateReview.name) {
-                uiState.currentMovie?.let { movie ->
-                    MovieCreateReviewScreen(movie = movie)
+                MovieCreateReviewScreen(selectedMovieUiState = movieViewModel.selectedMovieUiState)
 
-                }
             }
+
+             */
         }
     }
 }
