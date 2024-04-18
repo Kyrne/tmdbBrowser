@@ -21,4 +21,5 @@
     <string name="favorite_button_label">Favorite</string>
     <string name="api_loading_message">Loading...</string>
     <string name="api_error_message">Error</string>
+    <string name="layout_button">Change layout</string>
 </resources>

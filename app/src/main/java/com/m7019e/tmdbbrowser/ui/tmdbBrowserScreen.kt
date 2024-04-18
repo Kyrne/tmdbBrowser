@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,6 +26,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.m7019e.tmdbbrowser.R
+import com.m7019e.tmdbbrowser.ui.screens.MovieGridLayoutScreen
 import com.m7019e.tmdbbrowser.ui.screens.MovieListScreen
 import com.m7019e.tmdbbrowser.ui.screens.movie.MovieDetailsScreen
 
@@ -42,14 +44,16 @@ fun TmdbBrowserApp() {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen =
         TmdbBrowserScreen.valueOf(backStackEntry?.destination?.route ?: TmdbBrowserScreen.List.name)
+    val movieViewModel: MovieViewModel = viewModel(factory = MovieViewModel.Factory)
 
     Scaffold(topBar = {
         TmdbBrowserAppBar(
             currentScreen = currentScreen,
             canNavigateBack = navController.previousBackStackEntry != null,
-            navigateUp = { navController.navigateUp() })
+            navigateUp = { navController.navigateUp() },
+            changeLayout = { movieViewModel.changeLayout() }
+        )
     }) { innerPadding ->
-        val movieViewModel: MovieViewModel = viewModel(factory = MovieViewModel.Factory)
 
         NavHost(
             navController = navController,
@@ -59,14 +63,30 @@ fun TmdbBrowserApp() {
                 .padding(innerPadding)
         ) {
             composable(route = TmdbBrowserScreen.List.name) {
-                MovieListScreen(
-                    movieListUiState = movieViewModel.movieListUiState,
-                    onMovieClick = { movie ->
-                        movieViewModel.setSelectedMovie(movie)
-                        navController.navigate(TmdbBrowserScreen.Details.name)
-                    },
-                    modifier = Modifier.fillMaxSize()
-                )
+                when (movieViewModel.movieUiLayout) {
+                    Layout.LIST -> {
+                        MovieListScreen(
+                            movieListUiState = movieViewModel.movieListUiState,
+                            onMovieClick = { movie ->
+                                movieViewModel.setSelectedMovie(movie)
+                                navController.navigate(TmdbBrowserScreen.Details.name)
+                            },
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+
+                    Layout.GRID -> {
+                        MovieGridLayoutScreen(
+                            movieListUiState = movieViewModel.movieListUiState,
+                            onMovieClick = { movie ->
+                                movieViewModel.setSelectedMovie(movie)
+                                navController.navigate(TmdbBrowserScreen.Details.name)
+                            },
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+                }
+
             }
             composable(route = TmdbBrowserScreen.Details.name) {
                 MovieDetailsScreen(
@@ -104,6 +124,7 @@ fun TmdbBrowserAppBar(
     currentScreen: TmdbBrowserScreen,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
+    changeLayout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
@@ -122,6 +143,15 @@ fun TmdbBrowserAppBar(
                     )
                 }
             }
+        },
+        actions = {
+            IconButton(onClick = changeLayout) {
+                Icon(
+                    imageVector = Icons.Filled.List,
+                    contentDescription = stringResource(id = R.string.layout_button)
+                )
+            }
+
         }
     )
 }
