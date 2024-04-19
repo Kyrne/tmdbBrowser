@@ -10,5 +10,9 @@ object Constants {
     const val BACKDROP_IMAGE_WIDTH = "original"
     const val POSTER_IMAGE_WIDTH = "original"
     const val IMDB_BASE_URL = "https://www.imdb.com/title/"
+    const val YOUTUBE_VIDEO_BASE_URL = "https://www.youtube.com/watch?v="
+    const val YOUTUBE_THUMBNAIL_BASE_URL = "https://img.youtube.com/vi/"
+    const val YOUTUBE_THUMBNAIL_QUALITY = "/maxresdefault.jpg"
     const val API_KEY = BuildConfig.API_KEY
+    const val DEBUG_VIDEO_PLAYER = true
 }

@@ -12,6 +12,8 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.m7019e.tmdbbrowser.TMDBApplication
 import com.m7019e.tmdbbrowser.data.MoviesRepository
 import com.m7019e.tmdbbrowser.model.Movie
+import com.m7019e.tmdbbrowser.model.Review
+import com.m7019e.tmdbbrowser.model.Video
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import retrofit2.HttpException
@@ -30,6 +32,13 @@ sealed interface SelectedMovieUiState {
     object Loading : SelectedMovieUiState
 }
 
+sealed interface ReviewUiState {
+    data class Success(val reviews: List<Review>) : ReviewUiState
+    object Error : ReviewUiState
+    object Loading : ReviewUiState
+}
+
+
 enum class Layout {
     GRID, LIST
 }
@@ -42,7 +51,16 @@ class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel
     var selectedMovieUiState: SelectedMovieUiState by mutableStateOf(SelectedMovieUiState.Loading)
         private set
 
+    var selectedVideo: Video? by mutableStateOf(null)
+        private set
+
+    var videoPlayer: Boolean by mutableStateOf(false)
+        private set
+
     var movieUiLayout: Layout by mutableStateOf(Layout.GRID)
+        private set
+
+    var reviewUiState: ReviewUiState by mutableStateOf(ReviewUiState.Loading)
         private set
 
     var genreMap: Map<Int, String> = mapOf()
@@ -61,7 +79,6 @@ class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel
         } catch (e: HttpException) {
             mapOf()
         }
-
     }
 
     fun getPopularMovies() {
@@ -94,10 +111,19 @@ class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel
         }
     }
 
+    fun setSelectedVideoToPlay(video: Video) {
+        selectedVideo = video
+    }
+
+    fun switchVideoPlayer() {
+        videoPlayer = !videoPlayer
+    }
+
     fun setSelectedMovie(movie: Movie) {
         viewModelScope.launch {
             selectedMovieUiState = SelectedMovieUiState.Loading
             selectedMovieUiState = try {
+                moviesRepository.getMovieVideos(movie)
                 val details: Movie = moviesRepository.getMovieDetails(movie)
                 movie.updateDetails(details)
                 SelectedMovieUiState.Success(movie)
@@ -114,6 +140,19 @@ class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel
             Layout.LIST
         } else {
             Layout.GRID
+        }
+    }
+
+    fun getMovieReviews(movie: Movie) {
+        viewModelScope.launch {
+            reviewUiState = ReviewUiState.Loading
+            reviewUiState = try {
+                ReviewUiState.Success(moviesRepository.getMovieReviews(movie).reviews)
+            } catch (e: IOException) {
+                ReviewUiState.Error
+            } catch (e: HttpException) {
+                ReviewUiState.Error
+            }
         }
     }
 

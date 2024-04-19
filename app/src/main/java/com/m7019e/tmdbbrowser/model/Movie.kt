@@ -48,6 +48,7 @@ data class Movie(
     @SerialName(value = "imdb_id")
     var imdbId: String = "",
 
+    var videoList: List<Video> = listOf()
 
     ) {
     fun updateDetails(details: Movie) {
