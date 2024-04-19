@@ -13,6 +13,7 @@ import com.m7019e.tmdbbrowser.TMDBApplication
 import com.m7019e.tmdbbrowser.data.MoviesRepository
 import com.m7019e.tmdbbrowser.model.Movie
 import com.m7019e.tmdbbrowser.model.Review
+import com.m7019e.tmdbbrowser.model.Video
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import retrofit2.HttpException
@@ -48,6 +49,12 @@ class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel
         private set
 
     var selectedMovieUiState: SelectedMovieUiState by mutableStateOf(SelectedMovieUiState.Loading)
+        private set
+
+    var selectedVideo: Video? by mutableStateOf(null)
+        private set
+
+    var videoPlayer: Boolean by mutableStateOf(false)
         private set
 
     var movieUiLayout: Layout by mutableStateOf(Layout.GRID)
@@ -102,6 +109,14 @@ class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel
                 MovieListUiState.Error
             }
         }
+    }
+
+    fun setSelectedVideoToPlay(video: Video) {
+        selectedVideo = video
+    }
+
+    fun switchVideoPlayer() {
+        videoPlayer = !videoPlayer
     }
 
     fun setSelectedMovie(movie: Movie) {

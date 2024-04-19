@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,6 +30,7 @@ import com.m7019e.tmdbbrowser.R
 import com.m7019e.tmdbbrowser.ui.screens.MovieGridLayoutScreen
 import com.m7019e.tmdbbrowser.ui.screens.MovieListScreen
 import com.m7019e.tmdbbrowser.ui.screens.MovieReviewsScreen
+import com.m7019e.tmdbbrowser.ui.screens.VideoPlayerScreen
 import com.m7019e.tmdbbrowser.ui.screens.movie.MovieDetailsScreen
 
 enum class TmdbBrowserScreen(@StringRes val title: Int) {
@@ -36,8 +38,10 @@ enum class TmdbBrowserScreen(@StringRes val title: Int) {
     Details(title = R.string.movie_details),
     MovieReviews(title = R.string.user_ratings),
     CreateReview(title = R.string.create_review),
-    ReviewDetails(title = R.string.review_details)
+    ReviewDetails(title = R.string.review_details),
+    VideoPlayer(title = R.string.video_player)
 }
+
 
 @Composable
 fun TmdbBrowserApp() {
@@ -48,14 +52,17 @@ fun TmdbBrowserApp() {
         TmdbBrowserScreen.valueOf(backStackEntry?.destination?.route ?: TmdbBrowserScreen.List.name)
     val movieViewModel: MovieViewModel = viewModel(factory = MovieViewModel.Factory)
 
-    Scaffold(topBar = {
-        TmdbBrowserAppBar(
-            currentScreen = currentScreen,
-            canNavigateBack = navController.previousBackStackEntry != null,
-            navigateUp = { navController.navigateUp() },
-            changeLayout = { movieViewModel.changeLayout() }
-        )
-    }) { innerPadding ->
+    Scaffold(
+        topBar = {
+            TmdbBrowserAppBar(
+                currentScreen = currentScreen,
+                canNavigateBack = navController.previousBackStackEntry != null,
+                navigateUp = { navController.navigateUp() },
+                changeLayout = { movieViewModel.changeLayout() },
+                switchVideoPlayer = { movieViewModel.switchVideoPlayer() }
+            )
+        },
+    ) { innerPadding ->
 
         NavHost(
             navController = navController,
@@ -94,6 +101,7 @@ fun TmdbBrowserApp() {
                 MovieDetailsScreen(
                     selectedMovieUiState = movieViewModel.selectedMovieUiState,
                     isFavorite = false,
+                    videoPlayer = movieViewModel.videoPlayer,
                     onFavoriteClick = {
                     },
                     onUserRatingClick = { movie ->
@@ -102,10 +110,18 @@ fun TmdbBrowserApp() {
                     },
                     onReviewClick = {
                         navController.navigate(TmdbBrowserScreen.CreateReview.name)
-                    })
+                    },
+                    onVideoClick = { video ->
+                        movieViewModel.setSelectedVideoToPlay(video)
+                        navController.navigate(TmdbBrowserScreen.VideoPlayer.name)
+                    }
+                )
             }
             composable(route = TmdbBrowserScreen.MovieReviews.name) {
                 MovieReviewsScreen(reviewUiState = movieViewModel.reviewUiState)
+            }
+            composable(route = TmdbBrowserScreen.VideoPlayer.name) {
+                VideoPlayerScreen(video = movieViewModel.selectedVideo!!)
             }
 
             /*
@@ -129,6 +145,7 @@ fun TmdbBrowserAppBar(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     changeLayout: () -> Unit,
+    switchVideoPlayer: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
@@ -155,6 +172,12 @@ fun TmdbBrowserAppBar(
                         imageVector = Icons.Filled.List,
                         contentDescription = stringResource(id = R.string.layout_button)
                     )
+                }
+            }
+            // for video debugging purposes
+            if (currentScreen == TmdbBrowserScreen.Details) {
+                IconButton(onClick = switchVideoPlayer) {
+                    Icon(imageVector = Icons.Filled.Settings, contentDescription = null)
                 }
             }
 

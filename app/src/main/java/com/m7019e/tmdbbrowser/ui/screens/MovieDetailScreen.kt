@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -33,9 +32,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -46,11 +42,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.media3.common.MediaItem
-import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.ui.PlayerView
 import coil.compose.AsyncImage
 import com.m7019e.tmdbbrowser.R
 import com.m7019e.tmdbbrowser.data.Movies
@@ -63,9 +54,11 @@ import com.m7019e.tmdbbrowser.utils.Constants
 fun MovieDetailsScreen(
     selectedMovieUiState: SelectedMovieUiState,
     isFavorite: Boolean,
+    videoPlayer: Boolean,
     onFavoriteClick: (Movie) -> Unit,
     onUserRatingClick: (Movie) -> Unit,
     onReviewClick: (Movie) -> Unit,
+    onVideoClick: (Video) -> Unit
 ) {
     when (selectedMovieUiState) {
         is SelectedMovieUiState.Success -> {
@@ -83,10 +76,12 @@ fun MovieDetailsScreen(
                 MovieDetails(
                     selectedMovieUiState.movie,
                     isFavorite,
+                    videoPlayer,
                     onFavoriteClick,
                     onUserRatingClick,
                     onReviewClick,
-                    Modifier.padding(start = 4.dp, end = 4.dp)
+                    onVideoClick,
+                    Modifier.padding(start = 4.dp, end = 4.dp),
                 )
 
             }
@@ -113,9 +108,11 @@ fun MovieDetailsScreen(
 fun MovieDetails(
     movie: Movie,
     isFavorite: Boolean,
+    videoPlayer: Boolean,
     onFavoriteClick: (Movie) -> Unit,
     onUserRatingClick: (Movie) -> Unit,
     onCreateReviewClick: (Movie) -> Unit,
+    onVideoClick: (Video) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -148,7 +145,11 @@ fun MovieDetails(
             }
         }
         if (movie.videoList.isNotEmpty()) {
-            MovieVideosList(videos = movie.videoList)
+            MovieVideosList(
+                videos = movie.videoList,
+                videoPlayer = videoPlayer,
+                onVideoClick = onVideoClick
+            )
         }
 
 
@@ -296,7 +297,7 @@ fun MovieDetailsOverview(movie: Movie) {
 }
 
 @Composable
-fun MovieVideosList(videos: List<Video>) {
+fun MovieVideosList(videos: List<Video>, videoPlayer: Boolean, onVideoClick: (Video) -> Unit) {
     Text(
         text = stringResource(id = R.string.extras),
         style = MaterialTheme.typography.titleLarge,
@@ -304,16 +305,28 @@ fun MovieVideosList(videos: List<Video>) {
     )
     LazyRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
         items(videos) { video ->
-            VideoCard(video = video)
+            VideoCard(video = video, videoPlayer, onVideoClick)
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VideoCard(video: Video) {
+fun VideoCard(video: Video, videoPlayer: Boolean, onVideoClick: (Video) -> Unit) {
+    val ctx = LocalContext.current
     Column(modifier = Modifier.width(228.dp)) {
-        Card {
+        Card(onClick = {
+            if (video.site != "YouTube" || videoPlayer) {
+                onVideoClick(video)
+            } else {
+                val browserIntent =
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(Constants.YOUTUBE_VIDEO_BASE_URL + video.key)
+                    )
+                ctx.startActivity(browserIntent)
+            }
+        }) {
             AsyncImage(
                 model = Constants.YOUTUBE_THUMBNAIL_BASE_URL + video.key + Constants.YOUTUBE_THUMBNAIL_QUALITY,
                 contentDescription = video.name,
@@ -350,47 +363,8 @@ fun VideoCard(video: Video) {
 @Preview(showBackground = true)
 @Composable
 fun VideoCardPreview() {
-    VideoCard(video = Video(name = "Video title", type = "Trailer", key = "2", site = "Youtube"))
-}
-
-@OptIn(UnstableApi::class)
-@Composable
-fun ExoPlayerView(video: Video) {
-    // Get the current context
-    val context = LocalContext.current
-
-    // Initialize ExoPlayer
-    val exoPlayer = ExoPlayer.Builder(context).build()
-
-    // Create a MediaSource
-    val mediaSource = remember(Constants.YOUTUBE_VIDEO_BASE_URL + video.key) {
-        MediaItem.fromUri(Constants.YOUTUBE_VIDEO_BASE_URL + video.key)
-    }
-
-    // Set MediaSource to ExoPlayer
-    LaunchedEffect(mediaSource) {
-        exoPlayer.setMediaItem(mediaSource)
-        exoPlayer.prepare()
-    }
-
-    // Manage lifecycle events
-    DisposableEffect(Unit) {
-        onDispose {
-            exoPlayer.release()
-        }
-    }
-
-    // Use AndroidView to embed an Android View (PlayerView) into Compose
-    AndroidView(
-        factory = { ctx ->
-            PlayerView(ctx).apply {
-                player = exoPlayer
-            }
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp) // Set your desired height
-    )
+    VideoCard(video = Video(name = "Video title", type = "Trailer", key = "2", site = "Youtube"),
+        videoPlayer = false, {})
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -428,6 +402,6 @@ fun MovieDetailsGenreList(movie: Movie) {
 @Preview(showBackground = true)
 @Composable
 fun MovieDetailsPreview() {
-    MovieDetails(Movies.getMovies()[0], isFavorite = true, {}, {}, {})
+    MovieDetails(Movies.getMovies()[0], isFavorite = true, false, {}, {}, {}, {})
 }
 

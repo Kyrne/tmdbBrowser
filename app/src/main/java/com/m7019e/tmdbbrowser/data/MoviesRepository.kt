@@ -3,7 +3,6 @@ package com.m7019e.tmdbbrowser.data
 import com.m7019e.tmdbbrowser.model.Movie
 import com.m7019e.tmdbbrowser.model.MovieResponse
 import com.m7019e.tmdbbrowser.model.MovieReviewResponse
-import com.m7019e.tmdbbrowser.model.VideosResponse
 import com.m7019e.tmdbbrowser.network.TMDBApiService
 
 interface MoviesRepository {

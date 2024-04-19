@@ -14,4 +14,5 @@ object Constants {
     const val YOUTUBE_THUMBNAIL_BASE_URL = "https://img.youtube.com/vi/"
     const val YOUTUBE_THUMBNAIL_QUALITY = "/maxresdefault.jpg"
     const val API_KEY = BuildConfig.API_KEY
+    const val DEBUG_VIDEO_PLAYER = true
 }
