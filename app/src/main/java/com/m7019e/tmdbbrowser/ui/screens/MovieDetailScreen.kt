@@ -2,6 +2,7 @@ package com.m7019e.tmdbbrowser.ui.screens.movie
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -9,7 +10,11 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -18,10 +23,15 @@ import androidx.compose.material.icons.twotone.ExitToApp
 import androidx.compose.material.icons.twotone.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -29,12 +39,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.media3.common.MediaItem
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.PlayerView
 import coil.compose.AsyncImage
 import com.m7019e.tmdbbrowser.R
 import com.m7019e.tmdbbrowser.data.Movies
 import com.m7019e.tmdbbrowser.model.Movie
+import com.m7019e.tmdbbrowser.model.Video
 import com.m7019e.tmdbbrowser.ui.SelectedMovieUiState
 import com.m7019e.tmdbbrowser.utils.Constants
 
@@ -123,6 +140,9 @@ fun MovieDetails(
                         .padding(horizontal = 8.dp, vertical = 8.dp)
                 )
             }
+        }
+        if (movie.videoList.isNotEmpty()) {
+            MovieVideosList(videos = movie.videoList)
         }
 
 
@@ -269,6 +289,102 @@ fun MovieDetailsOverview(movie: Movie) {
     }
 }
 
+@Composable
+fun MovieVideosList(videos: List<Video>) {
+    Text(
+        text = stringResource(id = R.string.extras),
+        style = MaterialTheme.typography.titleLarge,
+        fontWeight = FontWeight.SemiBold
+    )
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        items(videos) { video ->
+            VideoCard(video = video)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun VideoCard(video: Video) {
+    Column(modifier = Modifier.width(228.dp)) {
+        Card {
+            AsyncImage(
+                model = Constants.YOUTUBE_THUMBNAIL_BASE_URL + video.key + Constants.YOUTUBE_THUMBNAIL_QUALITY,
+                contentDescription = video.name,
+                modifier = Modifier.height(128.dp),
+                contentScale = ContentScale.Fit
+            )
+        }
+
+        Box(modifier = Modifier
+            .padding(start = 4.dp, end = 4.dp)
+            .fillMaxWidth()) {
+            Column {
+                Text(
+                    text = video.name,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Text(
+                    text = video.type,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.outline
+                )
+            }
+        }
+
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun VideoCardPreview() {
+    VideoCard(video = Video(name = "Video title", type = "Trailer", key = "2", site = "Youtube"))
+}
+
+@OptIn(UnstableApi::class)
+@Composable
+fun ExoPlayerView(video: Video) {
+    // Get the current context
+    val context = LocalContext.current
+
+    // Initialize ExoPlayer
+    val exoPlayer = ExoPlayer.Builder(context).build()
+
+    // Create a MediaSource
+    val mediaSource = remember(Constants.YOUTUBE_VIDEO_BASE_URL + video.key) {
+        MediaItem.fromUri(Constants.YOUTUBE_VIDEO_BASE_URL + video.key)
+    }
+
+    // Set MediaSource to ExoPlayer
+    LaunchedEffect(mediaSource) {
+        exoPlayer.setMediaItem(mediaSource)
+        exoPlayer.prepare()
+    }
+
+    // Manage lifecycle events
+    DisposableEffect(Unit) {
+        onDispose {
+            exoPlayer.release()
+        }
+    }
+
+    // Use AndroidView to embed an Android View (PlayerView) into Compose
+    AndroidView(
+        factory = { ctx ->
+            PlayerView(ctx).apply {
+                player = exoPlayer
+            }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp) // Set your desired height
+    )
+}
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MovieDetailsTitle(movie: Movie) {
@@ -306,3 +422,4 @@ fun MovieDetailsGenreList(movie: Movie) {
 fun MovieDetailsPreview() {
     MovieDetails(Movies.getMovies()[0], isFavorite = true, {}, {}, {})
 }
+

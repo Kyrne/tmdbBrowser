@@ -23,4 +23,5 @@
     <string name="api_error_message">Error</string>
     <string name="layout_button">Change layout</string>
     <string name="review_details">Review details</string>
+    <string name="extras">Extras</string>
 </resources>

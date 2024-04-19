@@ -55,7 +55,7 @@ class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel
 
     var reviewUiState: ReviewUiState by mutableStateOf(ReviewUiState.Loading)
         private set
-    
+
     var genreMap: Map<Int, String> = mapOf()
         private set
 
@@ -108,6 +108,7 @@ class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel
         viewModelScope.launch {
             selectedMovieUiState = SelectedMovieUiState.Loading
             selectedMovieUiState = try {
+                moviesRepository.getMovieVideos(movie)
                 val details: Movie = moviesRepository.getMovieDetails(movie)
                 movie.updateDetails(details)
                 SelectedMovieUiState.Success(movie)
