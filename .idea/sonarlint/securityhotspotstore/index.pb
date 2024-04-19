@@ -6,7 +6,7 @@ h
 H
 .github/workflows/ci.yml,8/9/899ce9c202bf7bb5480e72836c3edc773c9c4244
 D
-app/build.gradle.kts,d\2\d2a4383452aad84a18429a5844d31330a012a9e6
+app/build.gradle.kts,d/2/d2a4383452aad84a18429a5844d31330a012a9e6
 :
 
 .gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
@@ -31,7 +31,7 @@ I
 v
 Fapp/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieListScreen.kt,3\1\314076c830b96007a04ec9cd556884a737e70195
 x
-Happ/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieDetailScreen.kt,c\f\cfa26cfb9bb271602c3a6480b3155a8cab80b854
+Happ/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieDetailScreen.kt,c/f/cfa26cfb9bb271602c3a6480b3155a8cab80b854
 B
 secrets.properties,4\1\4117a40ac446e6d331063f729af6fa5868a63cc7
 i
@@ -49,28 +49,12 @@ m
 q
 Aapp/src/main/java/com/m7019e/tmdbbrowser/data/MoviesRepository.kt,a\3\a342a8cdc56e1e5d089e435186c33b77b5f9ebd0
 o
-?app/src/main/java/com/m7019e/tmdbbrowser/model/MovieResponse.kt,a\d\ad5cb329c8ea05f891f9d3a00d625300e6f31f1b
+?app/src/main/java/com/m7019e/tmdbbrowser/model/MovieResponse.kt,a/d/ad5cb329c8ea05f891f9d3a00d625300e6f31f1b
 r
 Bapp/src/main/java/com/m7019e/tmdbbrowser/network/TMDBApiService.kt,1\a\1ab3a4b499b3a8821263131cca5a55a7128bad30
 k
 ;app/src/main/java/com/m7019e/tmdbbrowser/TMDBApplication.kt,b/9/b9832035b6aaa13cb0bdfb4f67e6bc2e451b209f
-n
->app/src/main/java/com/m7019e/tmdbbrowser/model/MovieDetails.kt,b/7/b7c7fd250746176877fa37013ef97f08f161ce26
-f
-6app/src/main/java/com/m7019e/tmdbbrowser/utils/util.kt,7/3/73ef19fd41f9cff5a517a840d2d7b780da850281
 o
 ?app/src/main/java/com/m7019e/tmdbbrowser/model/GenreResponse.kt,5/b/5bd8b1b9d5c5fa3ed7518b997d56b85987a102e4
 g
 7app/src/main/java/com/m7019e/tmdbbrowser/model/Genre.kt,9/d/9d150a72c4f141c38bc2dcd8df5df0a6fd444478
-|
-Lapp/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieGridLayoutScreen.kt,7\7\77c086838349aa3767a55d81ffc20e1fed636e16
-u
-Eapp/src/main/java/com/m7019e/tmdbbrowser/model/MovieReviewResponse.kt,d\b\db5b8c8fcbc5e3e6ac3ce881911b91891a7ae7b2
-h
-8app/src/main/java/com/m7019e/tmdbbrowser/model/Review.kt,c\d\cd5a9b41958f0519e85f684176a37e39628a8c50
-y
-Iapp/src/main/java/com/m7019e/tmdbbrowser/ui/screens/MovieReviewsScreen.kt,d\9\d94f70ca1f8478680d814f02e012f847bb27df98
-z
-Japp/src/main/java/com/m7019e/tmdbbrowser/ui/screens/ReviewDetailsScreen.kt,7\e\7ee9768361fc4e34ca173d04ce61a9411eb46988
-p
-@app/src/main/java/com/m7019e/tmdbbrowser/model/VideosResponse.kt,1\6\16263241bcdc57b530863163f7c5b16e5150caaa
