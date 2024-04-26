@@ -47,20 +47,19 @@ import com.m7019e.tmdbbrowser.R
 import com.m7019e.tmdbbrowser.data.Movies
 import com.m7019e.tmdbbrowser.model.Movie
 import com.m7019e.tmdbbrowser.model.Video
+import com.m7019e.tmdbbrowser.ui.MovieViewModel
 import com.m7019e.tmdbbrowser.ui.SelectedMovieUiState
 import com.m7019e.tmdbbrowser.utils.Constants
 
 @Composable
 fun MovieDetailsScreen(
-    selectedMovieUiState: SelectedMovieUiState,
-    isFavorite: Boolean,
+    movieViewModel: MovieViewModel,
     videoPlayer: Boolean,
-    onFavoriteClick: (Movie) -> Unit,
     onUserRatingClick: (Movie) -> Unit,
     onReviewClick: (Movie) -> Unit,
     onVideoClick: (Video) -> Unit
 ) {
-    when (selectedMovieUiState) {
+    when (val selectedMovieUiState = movieViewModel.selectedMovieUiState) {
         is SelectedMovieUiState.Success -> {
             Column(
                 modifier = Modifier
@@ -75,9 +74,15 @@ fun MovieDetailsScreen(
                 )
                 MovieDetails(
                     selectedMovieUiState.movie,
-                    isFavorite,
+                    selectedMovieUiState.isFavorite,
                     videoPlayer,
-                    onFavoriteClick,
+                    {
+                        if (selectedMovieUiState.isFavorite) {
+                            movieViewModel.deleteMovie(selectedMovieUiState.movie)
+                        } else {
+                            movieViewModel.saveMovie(selectedMovieUiState.movie)
+                        }
+                    },
                     onUserRatingClick,
                     onReviewClick,
                     onVideoClick,
@@ -109,7 +114,7 @@ fun MovieDetails(
     movie: Movie,
     isFavorite: Boolean,
     videoPlayer: Boolean,
-    onFavoriteClick: (Movie) -> Unit,
+    onFavoriteClick: () -> Unit,
     onUserRatingClick: (Movie) -> Unit,
     onCreateReviewClick: (Movie) -> Unit,
     onVideoClick: (Video) -> Unit,
@@ -160,7 +165,7 @@ fun MovieDetails(
 fun MovieDetailsUserRating(
     movie: Movie,
     isFavorite: Boolean,
-    onFavoriteClick: (Movie) -> Unit,
+    onFavoriteClick: () -> Unit,
     onUserRatingClick: (Movie) -> Unit,
     onCreateReviewClick: (Movie) -> Unit,
 ) {
@@ -201,7 +206,7 @@ fun MovieDetailsUserRating(
             }
         }
         Button(
-            onClick = { onFavoriteClick(movie) },
+            onClick = { onFavoriteClick() },
             shape = RectangleShape,
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.surface,

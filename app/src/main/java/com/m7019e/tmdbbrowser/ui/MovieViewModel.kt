@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.m7019e.tmdbbrowser.TMDBApplication
 import com.m7019e.tmdbbrowser.data.MoviesRepository
+import com.m7019e.tmdbbrowser.data.SavedMovieRepository
 import com.m7019e.tmdbbrowser.model.Movie
 import com.m7019e.tmdbbrowser.model.Review
 import com.m7019e.tmdbbrowser.model.Video
@@ -27,7 +28,7 @@ sealed interface MovieListUiState {
 }
 
 sealed interface SelectedMovieUiState {
-    data class Success(val movie: Movie) : SelectedMovieUiState
+    data class Success(val movie: Movie, val isFavorite: Boolean) : SelectedMovieUiState
     object Error : SelectedMovieUiState
     object Loading : SelectedMovieUiState
 }
@@ -43,7 +44,10 @@ enum class Layout {
     GRID, LIST
 }
 
-class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel() {
+class MovieViewModel(
+    private val moviesRepository: MoviesRepository,
+    private val savedMovieRepository: SavedMovieRepository
+) : ViewModel() {
 
     var movieListUiState: MovieListUiState by mutableStateOf(MovieListUiState.Loading)
         private set
@@ -126,7 +130,7 @@ class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel
                 moviesRepository.getMovieVideos(movie)
                 val details: Movie = moviesRepository.getMovieDetails(movie)
                 movie.updateDetails(details)
-                SelectedMovieUiState.Success(movie)
+                SelectedMovieUiState.Success(movie, savedMovieRepository.getMovie(movie.id) != null)
             } catch (e: IOException) {
                 SelectedMovieUiState.Error
             } catch (e: HttpException) {
@@ -156,12 +160,40 @@ class MovieViewModel(private val moviesRepository: MoviesRepository) : ViewModel
         }
     }
 
+    fun getSavedMovies() {
+        viewModelScope.launch {
+            movieListUiState = MovieListUiState.Loading
+            movieListUiState = try {
+                MovieListUiState.Success(savedMovieRepository.getSavedMovies())
+            } catch (e: IOException) {
+                MovieListUiState.Error
+            } catch (e: HttpException) {
+                MovieListUiState.Error
+            }
+        }
+    }
+
+    fun saveMovie(movie: Movie) {
+        viewModelScope.launch {
+            savedMovieRepository.insertMovie(movie)
+            selectedMovieUiState = SelectedMovieUiState.Success(movie, true)
+        }
+    }
+
+    fun deleteMovie(movie: Movie) {
+        viewModelScope.launch {
+            savedMovieRepository.deleteMovie(movie)
+            selectedMovieUiState = SelectedMovieUiState.Success(movie, false)
+        }
+    }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = (this[APPLICATION_KEY] as TMDBApplication)
                 val moviesRepository = application.container.moviesRepository
-                MovieViewModel(moviesRepository = moviesRepository)
+                val savedMoviesRepository = application.container.savedMovieRepository
+                MovieViewModel(moviesRepository = moviesRepository, savedMoviesRepository)
             }
         }
     }

@@ -1,5 +1,9 @@
 package com.m7019e.tmdbbrowser.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+import com.google.gson.Gson
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -15,27 +19,29 @@ import kotlinx.serialization.Serializable
  * @param overview a short description of the movie
  */
 @Serializable
+@Entity(tableName = "favorite_movies")
 data class Movie(
+    @PrimaryKey
     @SerialName(value = "id")
-    var id: Long = 0L,
+    var id: Long = 0,
 
     @SerialName(value = "title")
-    var title: String = "",
+    var title: String,
 
     @SerialName(value = "poster_path")
-    var posterPath: String = "",
+    var posterPath: String,
 
     @SerialName(value = "backdrop_path")
-    var backdropPath: String = "",
+    var backdropPath: String,
 
     @SerialName(value = "release_date")
-    var releaseDate: String = "",
+    var releaseDate: String,
 
     @SerialName(value = "overview")
-    var overview: String = "",
+    var overview: String,
 
     @SerialName(value = "vote_average")
-    var userRating: Float = 0f,
+    var userRating: Float,
 
     @SerialName(value = "genre_ids")
     var genre_ids: List<Int> = listOf(),
@@ -49,8 +55,8 @@ data class Movie(
     var imdbId: String = "",
 
     var videoList: List<Video> = listOf()
+) {
 
-    ) {
     fun updateDetails(details: Movie) {
         if (details.homepage.isNotEmpty()) {
             this.homepage = details.homepage
@@ -72,3 +78,35 @@ data class Movie(
     }
 }
 
+class Converters {
+    @TypeConverter
+    fun fromListInt(list: List<Int>): String {
+        return list.joinToString(",")
+    }
+
+    @TypeConverter
+    fun toListInt(data: String): List<Int> {
+        return listOf(*data.split(",").map { it.toInt() }.toTypedArray())
+    }
+
+    @TypeConverter
+    fun fromListString(list: List<String>): String {
+        return list.joinToString(",")
+    }
+
+    @TypeConverter
+    fun toListString(data: String): List<String> {
+        return listOf(*data.split(",").map { it }.toTypedArray())
+    }
+
+    @TypeConverter
+    fun fromListVideo(list: List<Video>): String {
+        return Gson().toJson(list)
+    }
+
+    @TypeConverter
+    fun toListVideo(data: String): List<Video> {
+        return Gson().fromJson(data, Array<Video>::class.java).asList()
+    }
+
+}

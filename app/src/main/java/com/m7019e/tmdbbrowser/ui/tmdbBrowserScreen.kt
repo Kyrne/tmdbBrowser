@@ -1,12 +1,19 @@
 package com.m7019e.tmdbbrowser.ui
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -17,7 +24,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -62,6 +71,22 @@ fun TmdbBrowserApp() {
                 switchVideoPlayer = { movieViewModel.switchVideoPlayer() }
             )
         },
+        bottomBar = {
+            if (navController.previousBackStackEntry == null) {
+                TmdbBrowserAppBottomBar(
+                    onClickPopular = {
+                        movieViewModel.getPopularMovies()
+                    },
+                    onClickTopRated = {
+                        movieViewModel.getTopRatedMovies()
+                    },
+                    onClickFavorite = {
+                        movieViewModel.getSavedMovies()
+                    }
+                )
+            }
+
+        }
     ) { innerPadding ->
 
         NavHost(
@@ -99,11 +124,8 @@ fun TmdbBrowserApp() {
             }
             composable(route = TmdbBrowserScreen.Details.name) {
                 MovieDetailsScreen(
-                    selectedMovieUiState = movieViewModel.selectedMovieUiState,
-                    isFavorite = false,
+                    movieViewModel = movieViewModel,
                     videoPlayer = movieViewModel.videoPlayer,
-                    onFavoriteClick = {
-                    },
                     onUserRatingClick = { movie ->
                         movieViewModel.getMovieReviews(movie)
                         navController.navigate(TmdbBrowserScreen.MovieReviews.name)
@@ -124,13 +146,6 @@ fun TmdbBrowserApp() {
                 VideoPlayerScreen(video = movieViewModel.selectedVideo!!)
             }
 
-            /*
-            composable(route = TmdbBrowserScreen.CreateReview.name) {
-                MovieCreateReviewScreen(selectedMovieUiState = movieViewModel.selectedMovieUiState)
-
-            }
-
-             */
         }
     }
 }
@@ -185,8 +200,74 @@ fun TmdbBrowserAppBar(
     )
 }
 
+@Composable
+fun TmdbBrowserAppBottomBar(
+    onClickPopular: () -> Unit,
+    onClickTopRated: () -> Unit,
+    onClickFavorite: () -> Unit
+) {
+    BottomAppBar(actions = {
+        Button(
+            onClick = onClickPopular,
+            shape = RectangleShape,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface
+            ),
+            modifier = Modifier.weight(2f)
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(
+                    imageVector = Icons.Filled.DateRange,
+                    contentDescription = stringResource(id = R.string.popular_button)
+                )
+                Text(
+                    text = stringResource(id = R.string.popular_button),
+                    style = MaterialTheme.typography.titleSmall
+                )
+            }
+        }
+        Button(
+            onClick = onClickTopRated,
+            shape = RectangleShape,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface
+            ),
+            modifier = Modifier.weight(2f)
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(
+                    imageVector = Icons.Filled.Star,
+                    contentDescription = stringResource(id = R.string.top_rated_button)
+                )
+                Text(text = stringResource(id = R.string.top_rated_button))
+            }
+        }
+        Button(
+            onClick = onClickFavorite,
+            shape = RectangleShape,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface
+            ),
+            modifier = Modifier.weight(2f)
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(
+                    imageVector = Icons.Filled.Favorite,
+                    contentDescription = stringResource(id = R.string.favorite_button_label)
+                )
+                Text(text = stringResource(id = R.string.favorite_button_label))
+            }
+        }
+
+    })
+}
+
 @Preview(showBackground = true)
 @Composable
-fun TmdbBrowserAppPreview() {
-    TmdbBrowserApp()
+fun TmdbBrowserAppBottomBarPreview() {
+    TmdbBrowserAppBottomBar({}, {}, {})
 }
+

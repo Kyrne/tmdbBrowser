@@ -25,4 +25,6 @@
     <string name="review_details">Review details</string>
     <string name="extras">Extras</string>
     <string name="video_player">Video player</string>
+    <string name="popular_button">Popular</string>
+    <string name="top_rated_button">Top Rated</string>
 </resources>
